@@ -6,7 +6,7 @@
   objects = {
 
 /* Begin PBXBuildFile section */
-  1A2B3C4D5E6F7A0000000020 /* OCRScreenShotAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7A0000000010 /* OCRScreenShotAppApp.swift */; };
+  1A2B3C4D5E6F7A0000000020 /* OCRScreenShotApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7A0000000010 /* OCRScreenShotApp.swift */; };
   1A2B3C4D5E6F7A0000000021 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7A0000000011 /* ContentView.swift */; };
   1A2B3C4D5E6F7A0000000022 /* PhotoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7A0000000012 /* PhotoData.swift */; };
   1A2B3C4D5E6F7A0000000023 /* GoogleFormPoster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7A0000000013 /* GoogleFormPoster.swift */; };
@@ -15,7 +15,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-  1A2B3C4D5E6F7A0000000010 /* OCRScreenShotAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRScreenShotAppApp.swift; sourceTree = "<group>"; };
+  1A2B3C4D5E6F7A0000000010 /* OCRScreenShotApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRScreenShotApp.swift; sourceTree = "<group>"; };
   1A2B3C4D5E6F7A0000000011 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
   1A2B3C4D5E6F7A0000000012 /* PhotoData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoData.swift; sourceTree = "<group>"; };
   1A2B3C4D5E6F7A0000000013 /* GoogleFormPoster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleFormPoster.swift; sourceTree = "<group>"; };
@@ -28,7 +28,7 @@
   1A2B3C4D5E6F7A0000000003 /* Sources */ = {
     isa = PBXGroup;
     children = (
-      1A2B3C4D5E6F7A0000000010 /* OCRScreenShotAppApp.swift */,
+      1A2B3C4D5E6F7A0000000010 /* OCRScreenShotApp.swift */,
       1A2B3C4D5E6F7A0000000011 /* ContentView.swift */,
       1A2B3C4D5E6F7A0000000012 /* PhotoData.swift */,
       1A2B3C4D5E6F7A0000000013 /* GoogleFormPoster.swift */,
@@ -122,7 +122,7 @@
     isa = PBXSourcesBuildPhase;
     buildActionMask = 2147483647;
     files = (
-      1A2B3C4D5E6F7A0000000020 /* OCRScreenShotAppApp.swift in Sources */,
+      1A2B3C4D5E6F7A0000000020 /* OCRScreenShotApp.swift in Sources */,
       1A2B3C4D5E6F7A0000000021 /* ContentView.swift in Sources */,
       1A2B3C4D5E6F7A0000000022 /* PhotoData.swift in Sources */,
       1A2B3C4D5E6F7A0000000023 /* GoogleFormPoster.swift in Sources */,
