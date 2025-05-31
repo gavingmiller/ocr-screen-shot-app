@@ -100,6 +100,8 @@ struct StatsView: View {
         Button(action: submit) {
             if isPosting {
                 ProgressView()
+            } else if statsModel?.hasParsingError == true {
+                Text("Parsing error cannot submit")
             } else {
                 switch photoData.postStatus {
                 case .success:
@@ -113,7 +115,7 @@ struct StatsView: View {
         }
         .buttonStyle(.borderedProminent)
         .tint(tintColor)
-        .disabled(isPosting || photoData.postStatus != .none || !authManager.isSignedIn)
+        .disabled(isPosting || photoData.postStatus != .none || !authManager.isSignedIn || statsModel?.hasParsingError == true)
         .padding(.top, 8)
     }
 
