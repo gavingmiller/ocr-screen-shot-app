@@ -1,5 +1,7 @@
 # OCR Screenshot App (iOS)
 
+This project is pure vibe coding an iOS App on OpenAI Codex. Minimal programming done by me directly aside from some XCode debugging.
+
 This sample project demonstrates how to pick screenshots from the photo library, perform OCR on each image, extract game related stats and upload the results to a Google Form. Each screenshot is listed with a success or failure indicator after uploading.
 
 ## Features
