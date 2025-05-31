@@ -27,3 +27,10 @@ This sample project demonstrates how to pick screenshots from the photo library,
 
 This repository now includes an `OCRScreenShotApp.xcodeproj` file. Open this project in Xcode to build and run the app.
 
+## Input
+
+![example](https://github.com/gavingmiller/ocr-screen-shot-app/blob/main/OCRScreenShotApp/OCRScreenShotApp/example.png)
+
+## Output
+
+<img width="335" alt="image" src="https://github.com/user-attachments/assets/c6a95b3e-9c42-473e-b5f7-c3ff2b7be78f" />
