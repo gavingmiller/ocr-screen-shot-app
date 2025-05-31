@@ -9,43 +9,58 @@ struct ContentView: View {
         NavigationView {
             VStack {
                 if photoItems.isEmpty {
-                    Text("Select screenshots to process")
-                }
-                List(photoItems) { item in
-                    HStack {
-                        if let image = item.image {
-                            Image(uiImage: image)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 100, height: 100)
-                        }
-                        VStack(alignment: .leading) {
-                            Text(item.ocrText ?? "No OCR yet")
-                            switch item.postStatus {
-                            case .none:
-                                Text("Pending")
-                                    .foregroundColor(.secondary)
-                            case .success:
-                                Text("Uploaded")
-                                    .foregroundColor(.green)
-                            case .failure:
-                                Text("Failed")
-                                    .foregroundColor(.red)
+                    Spacer()
+                    PhotosPicker(
+                        selection: $selectedItems,
+                        maxSelectionCount: nil,
+                        matching: .images,
+                        photoLibrary: .shared()
+                    ) {
+                        Text("Select Image from Library")
+                            .padding()
+                    }
+                    .onChange(of: selectedItems) { _ in
+                        handleResults(selectedItems)
+                    }
+                    Spacer()
+                } else {
+                    List(photoItems) { item in
+                        HStack {
+                            if let image = item.image {
+                                Image(uiImage: image)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 100, height: 100)
+                            }
+                            VStack(alignment: .leading) {
+                                Text(item.ocrText ?? "No OCR yet")
+                                switch item.postStatus {
+                                case .none:
+                                    Text("Pending")
+                                        .foregroundColor(.secondary)
+                                case .success:
+                                    Text("Uploaded")
+                                        .foregroundColor(.green)
+                                case .failure:
+                                    Text("Failed")
+                                        .foregroundColor(.red)
+                                }
                             }
                         }
                     }
+                    PhotosPicker(
+                        selection: $selectedItems,
+                        maxSelectionCount: nil,
+                        matching: .images,
+                        photoLibrary: .shared()
+                    ) {
+                        Text("Add Photos")
+                    }
+                    .onChange(of: selectedItems) { _ in
+                        handleResults(selectedItems)
+                    }
+                    .padding()
                 }
-                PhotosPicker(
-                    selection: $selectedItems,
-                    maxSelectionCount: nil,
-                    matching: .images,
-                    photoLibrary: .shared()) {
-                    Text("Pick Photos")
-                }
-                .onChange(of: selectedItems) { _ in
-                    handleResults(selectedItems)
-                }
-                .padding()
             }
             .navigationTitle("OCR Screen Shot")
         }
