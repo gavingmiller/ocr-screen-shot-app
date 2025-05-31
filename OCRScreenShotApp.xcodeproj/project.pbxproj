@@ -2,7 +2,7 @@
 {
   archiveVersion = 1;
   classes = {};
-  objectVersion = 55;
+  objectVersion = 57;
   objects = {
 
 /* Begin PBXBuildFile section */
@@ -80,17 +80,17 @@
   1A2B3C4D5E6F7A0000000000 /* Project object */ = {
     isa = PBXProject;
     attributes = {
-      LastUpgradeCheck = 1500;
+      LastUpgradeCheck = 1620;
       ORGANIZATIONNAME = "Codex";
       TargetAttributes = {
         1A2B3C4D5E6F7A0000000030 = {
-          CreatedOnToolsVersion = 15.0;
+          CreatedOnToolsVersion = 16.2;
           ProvisioningStyle = Automatic;
         };
       };
     };
     buildConfigurationList = 1A2B3C4D5E6F7A0000000034 /* Build configuration list for PBXProject \"OCRScreenShotApp\" */;
-    compatibilityVersion = "Xcode 14.0";
+    compatibilityVersion = "Xcode 16.0";
     developmentRegion = en;
     hasScannedForEncodings = 0;
     knownRegions = (
