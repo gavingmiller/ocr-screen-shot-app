@@ -11,6 +11,7 @@
   1A2B3C4D5E6F7A0000000022 /* PhotoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7A0000000012 /* PhotoData.swift */; };
   1A2B3C4D5E6F7A0000000023 /* GoogleFormPoster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7A0000000013 /* GoogleFormPoster.swift */; };
   1A2B3C4D5E6F7A0000000024 /* OCRProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7A0000000014 /* OCRProcessor.swift */; };
+  1A2B3C4D5E6F7A0000000026 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7A0000000016 /* StatsView.swift */; };
   1A2B3C4D5E6F7A0000000025 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7A0000000015 /* Info.plist */; };
 /* End PBXBuildFile section */
 
@@ -20,6 +21,7 @@
   1A2B3C4D5E6F7A0000000012 /* PhotoData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoData.swift; sourceTree = "<group>"; };
   1A2B3C4D5E6F7A0000000013 /* GoogleFormPoster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleFormPoster.swift; sourceTree = "<group>"; };
   1A2B3C4D5E6F7A0000000014 /* OCRProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRProcessor.swift; sourceTree = "<group>"; };
+  1A2B3C4D5E6F7A0000000016 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/StatsView.swift; sourceTree = "<group>"; };
   1A2B3C4D5E6F7A0000000015 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
   1A2B3C4D5E6F7A0000000040 /* OCRScreenShotApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = OCRScreenShotApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -33,6 +35,7 @@
       1A2B3C4D5E6F7A0000000012 /* PhotoData.swift */,
       1A2B3C4D5E6F7A0000000013 /* GoogleFormPoster.swift */,
       1A2B3C4D5E6F7A0000000014 /* OCRProcessor.swift */,
+      1A2B3C4D5E6F7A0000000016 /* StatsView.swift */,
       1A2B3C4D5E6F7A0000000015 /* Info.plist */,
     );
     path = OCRScreenShotApp;
@@ -127,6 +130,7 @@
       1A2B3C4D5E6F7A0000000022 /* PhotoData.swift in Sources */,
       1A2B3C4D5E6F7A0000000023 /* GoogleFormPoster.swift in Sources */,
       1A2B3C4D5E6F7A0000000024 /* OCRProcessor.swift in Sources */,
+      1A2B3C4D5E6F7A0000000026 /* StatsView.swift in Sources */,
     );
     runOnlyForDeploymentPostprocessing = 0;
   };
