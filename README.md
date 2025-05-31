@@ -22,5 +22,5 @@ This sample project demonstrates how to pick screenshots from the photo library,
 2. Replace the placeholder entry IDs in `GoogleFormPoster.swift` with the actual field entry IDs from your Google Form.
 3. Build and run on an iOS device running iOS 16 or later.
 
-This repository does not include an Xcode project file. Simply add these Swift source files to a new SwiftUI iOS project.
+This repository now includes an `OCRScreenShotApp.xcodeproj` file. Open this project in Xcode to build and run the app.
 

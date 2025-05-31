@@ -1,0 +1,196 @@
+// !$*UTF8*$
+{
+  archiveVersion = 1;
+  classes = {};
+  objectVersion = 55;
+  objects = {
+
+/* Begin PBXBuildFile section */
+  1A2B3C4D5E6F7A0000000020 /* OCRScreenShotAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7A0000000010 /* OCRScreenShotAppApp.swift */; };
+  1A2B3C4D5E6F7A0000000021 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7A0000000011 /* ContentView.swift */; };
+  1A2B3C4D5E6F7A0000000022 /* PhotoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7A0000000012 /* PhotoData.swift */; };
+  1A2B3C4D5E6F7A0000000023 /* GoogleFormPoster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7A0000000013 /* GoogleFormPoster.swift */; };
+  1A2B3C4D5E6F7A0000000024 /* OCRProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7A0000000014 /* OCRProcessor.swift */; };
+  1A2B3C4D5E6F7A0000000025 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7A0000000015 /* Info.plist */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+  1A2B3C4D5E6F7A0000000010 /* OCRScreenShotAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRScreenShotAppApp.swift; sourceTree = "<group>"; };
+  1A2B3C4D5E6F7A0000000011 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+  1A2B3C4D5E6F7A0000000012 /* PhotoData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoData.swift; sourceTree = "<group>"; };
+  1A2B3C4D5E6F7A0000000013 /* GoogleFormPoster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleFormPoster.swift; sourceTree = "<group>"; };
+  1A2B3C4D5E6F7A0000000014 /* OCRProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRProcessor.swift; sourceTree = "<group>"; };
+  1A2B3C4D5E6F7A0000000015 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+  1A2B3C4D5E6F7A0000000040 /* OCRScreenShotApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = OCRScreenShotApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+  1A2B3C4D5E6F7A0000000003 /* Sources */ = {
+    isa = PBXGroup;
+    children = (
+      1A2B3C4D5E6F7A0000000010 /* OCRScreenShotAppApp.swift */,
+      1A2B3C4D5E6F7A0000000011 /* ContentView.swift */,
+      1A2B3C4D5E6F7A0000000012 /* PhotoData.swift */,
+      1A2B3C4D5E6F7A0000000013 /* GoogleFormPoster.swift */,
+      1A2B3C4D5E6F7A0000000014 /* OCRProcessor.swift */,
+      1A2B3C4D5E6F7A0000000015 /* Info.plist */,
+    );
+    path = OCRScreenShotApp;
+    sourceTree = "<group>";
+  };
+  1A2B3C4D5E6F7A0000000002 /* Products */ = {
+    isa = PBXGroup;
+    children = (
+      1A2B3C4D5E6F7A0000000040 /* OCRScreenShotApp.app */,
+    );
+    name = Products;
+    sourceTree = "<group>";
+  };
+  1A2B3C4D5E6F7A0000000001 = {
+    isa = PBXGroup;
+    children = (
+      1A2B3C4D5E6F7A0000000003 /* Sources */,
+      1A2B3C4D5E6F7A0000000002 /* Products */,
+    );
+    sourceTree = "<group>";
+  };
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+  1A2B3C4D5E6F7A0000000030 /* OCRScreenShotApp */ = {
+    isa = PBXNativeTarget;
+    buildConfigurationList = 1A2B3C4D5E6F7A0000000035 /* Build configuration list for PBXNativeTarget \"OCRScreenShotApp\" */;
+    buildPhases = (
+      1A2B3C4D5E6F7A0000000031 /* Sources */,
+      1A2B3C4D5E6F7A0000000032 /* Frameworks */,
+      1A2B3C4D5E6F7A0000000033 /* Resources */,
+    );
+    buildRules = (
+    );
+    dependencies = (
+    );
+    name = OCRScreenShotApp;
+    productName = OCRScreenShotApp;
+    productReference = 1A2B3C4D5E6F7A0000000040 /* OCRScreenShotApp.app */;
+    productType = "com.apple.product-type.application";
+  };
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+  1A2B3C4D5E6F7A0000000000 /* Project object */ = {
+    isa = PBXProject;
+    attributes = {
+      LastUpgradeCheck = 1500;
+      ORGANIZATIONNAME = "Codex";
+      TargetAttributes = {
+        1A2B3C4D5E6F7A0000000030 = {
+          CreatedOnToolsVersion = 15.0;
+          ProvisioningStyle = Automatic;
+        };
+      };
+    };
+    buildConfigurationList = 1A2B3C4D5E6F7A0000000034 /* Build configuration list for PBXProject \"OCRScreenShotApp\" */;
+    compatibilityVersion = "Xcode 14.0";
+    developmentRegion = en;
+    hasScannedForEncodings = 0;
+    knownRegions = (
+      en,
+    );
+    mainGroup = 1A2B3C4D5E6F7A0000000001;
+    productRefGroup = 1A2B3C4D5E6F7A0000000002 /* Products */;
+    projectDirPath = "";
+    projectRoot = "";
+    targets = (
+      1A2B3C4D5E6F7A0000000030 /* OCRScreenShotApp */,
+    );
+  };
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+  1A2B3C4D5E6F7A0000000033 /* Resources */ = {
+    isa = PBXResourcesBuildPhase;
+    buildActionMask = 2147483647;
+    files = (
+      1A2B3C4D5E6F7A0000000025 /* Info.plist in Resources */,
+    );
+    runOnlyForDeploymentPostprocessing = 0;
+  };
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+  1A2B3C4D5E6F7A0000000031 /* Sources */ = {
+    isa = PBXSourcesBuildPhase;
+    buildActionMask = 2147483647;
+    files = (
+      1A2B3C4D5E6F7A0000000020 /* OCRScreenShotAppApp.swift in Sources */,
+      1A2B3C4D5E6F7A0000000021 /* ContentView.swift in Sources */,
+      1A2B3C4D5E6F7A0000000022 /* PhotoData.swift in Sources */,
+      1A2B3C4D5E6F7A0000000023 /* GoogleFormPoster.swift in Sources */,
+      1A2B3C4D5E6F7A0000000024 /* OCRProcessor.swift in Sources */,
+    );
+    runOnlyForDeploymentPostprocessing = 0;
+  };
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXFrameworksBuildPhase section */
+  1A2B3C4D5E6F7A0000000032 /* Frameworks */ = {
+    isa = PBXFrameworksBuildPhase;
+    buildActionMask = 2147483647;
+    files = (
+    );
+    runOnlyForDeploymentPostprocessing = 0;
+  };
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+  1A2B3C4D5E6F7A0000000036 /* Debug */ = {
+    isa = XCBuildConfiguration;
+    buildSettings = {
+      ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+      INFOPLIST_FILE = OCRScreenShotApp/Info.plist;
+      PRODUCT_BUNDLE_IDENTIFIER = com.example.OCRScreenShotApp;
+      PRODUCT_NAME = $(TARGET_NAME);
+      SWIFT_VERSION = 5.9;
+      IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+    };
+    name = Debug;
+  };
+  1A2B3C4D5E6F7A0000000037 /* Release */ = {
+    isa = XCBuildConfiguration;
+    buildSettings = {
+      ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+      INFOPLIST_FILE = OCRScreenShotApp/Info.plist;
+      PRODUCT_BUNDLE_IDENTIFIER = com.example.OCRScreenShotApp;
+      PRODUCT_NAME = $(TARGET_NAME);
+      SWIFT_VERSION = 5.9;
+      IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+      SWIFT_OPTIMIZATION_LEVEL = "-O";
+    };
+    name = Release;
+  };
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+  1A2B3C4D5E6F7A0000000034 /* Build configuration list for PBXProject \"OCRScreenShotApp\" */ = {
+    isa = XCConfigurationList;
+    buildConfigurations = (
+      1A2B3C4D5E6F7A0000000036 /* Debug */,
+      1A2B3C4D5E6F7A0000000037 /* Release */,
+    );
+    defaultConfigurationIsVisible = 0;
+    defaultConfigurationName = Release;
+  };
+  1A2B3C4D5E6F7A0000000035 /* Build configuration list for PBXNativeTarget \"OCRScreenShotApp\" */ = {
+    isa = XCConfigurationList;
+    buildConfigurations = (
+      1A2B3C4D5E6F7A0000000036 /* Debug */,
+      1A2B3C4D5E6F7A0000000037 /* Release */,
+    );
+    defaultConfigurationIsVisible = 0;
+    defaultConfigurationName = Release;
+  };
+/* End XCConfigurationList section */
+
+  };
+  rootObject = 1A2B3C4D5E6F7A0000000000 /* Project object */;
+}
