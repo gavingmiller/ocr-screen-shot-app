@@ -1,9 +1,11 @@
 import SwiftUI
+import UIKit
 
 struct StatsView: View {
     @Binding var photoData: PhotoData
 
     @State private var isPosting = false
+    @StateObject private var authManager = GoogleAuthManager.shared
 
     private var parsedPairs: [(String, String)] {
         if let text = photoData.ocrText,
@@ -72,6 +74,10 @@ struct StatsView: View {
                         }
                     }
 
+                    if !authManager.isSignedIn {
+                        signInButton
+                    }
+
                     submitButton
                 } else if let text = photoData.ocrText,
                           !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -107,8 +113,19 @@ struct StatsView: View {
         }
         .buttonStyle(.borderedProminent)
         .tint(tintColor)
-        .disabled(isPosting || photoData.postStatus != .none)
+        .disabled(isPosting || photoData.postStatus != .none || !authManager.isSignedIn)
         .padding(.top, 8)
+    }
+
+    private var signInButton: some View {
+        Button("Sign in with Google", action: signIn)
+            .buttonStyle(.borderedProminent)
+    }
+
+    private func signIn() {
+        guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let root = scene.windows.first(where: { $0.isKeyWindow })?.rootViewController else { return }
+        authManager.signIn(presenting: root)
     }
 
     private var tintColor: Color {
