@@ -70,7 +70,16 @@ class OCRProcessor {
         )
         var results: [(String, String)] = []
 
-        text
+        // Remove any text before "Battle Report" to avoid extraneous lines
+        let trimmedText: String
+        if let range = text.range(of: "battle report", options: .caseInsensitive) {
+            trimmedText = String(text[range.upperBound...])
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+        } else {
+            trimmedText = text
+        }
+
+        trimmedText
             .components(separatedBy: .newlines)
             .map { $0.trimmingCharacters(in: .whitespaces) }
             .forEach { line in
