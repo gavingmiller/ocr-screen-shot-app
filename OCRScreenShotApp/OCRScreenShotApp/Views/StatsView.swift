@@ -6,15 +6,18 @@ struct StatsView: View {
     @State private var isPosting = false
 
     private var parsedPairs: [(String, String)] {
-        if let text = photoData.ocrText {
+        if let text = photoData.ocrText,
+           !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             return OCRProcessor.shared.parsePairs(from: text)
         }
         return []
     }
 
     private var statsModel: StatsModel? {
-        if let text = photoData.ocrText {
+        if let text = photoData.ocrText,
+           !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             let pairs = OCRProcessor.shared.parsePairs(from: text)
+            guard !pairs.isEmpty else { return nil }
             return StatsModel(pairs: pairs)
         }
         return nil
@@ -40,7 +43,8 @@ struct StatsView: View {
     }
 
     private var extractedFields: OCRResultFields {
-        if let text = photoData.ocrText {
+        if let text = photoData.ocrText,
+           !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             return OCRProcessor.shared.extractFields(from: text)
         }
         return OCRResultFields()
@@ -78,12 +82,17 @@ struct StatsView: View {
                     }
 
                     submitButton
-                } else if let text = photoData.ocrText {
+                } else if let text = photoData.ocrText,
+                          !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                     Text("\nRecognized Text:")
                         .font(.headline)
                     Text(text)
                         .font(.footnote)
                         .padding(.top, 2)
+                } else {
+                    Text("Invalid image")
+                        .font(.headline)
+                        .padding(.top, 8)
                 }
             }
             .padding()
