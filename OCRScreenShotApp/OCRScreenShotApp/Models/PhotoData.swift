@@ -23,7 +23,7 @@ struct PhotoData: Identifiable {
     private let cropLeftRatio: CGFloat = 0.0
     private let cropTopRatio: CGFloat = 460.0 / 2622.0
     private let cropRightRatio: CGFloat = 1.0
-    private let cropBottomRatio: CGFloat = 2170.0 / 2622.0
+    private let cropBottomRatio: CGFloat = 1360 / 2622.0
 
     /// Crop the given image using the ratios above. The ratios are applied
     /// to the pixel dimensions of the image so this works for different
