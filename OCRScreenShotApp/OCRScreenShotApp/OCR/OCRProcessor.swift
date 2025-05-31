@@ -100,25 +100,39 @@ class OCRProcessor {
         }
 
         let cleanedText = removeCombatSection(from: trimmedText)
-        cleanedText
+        let lines = cleanedText
             .components(separatedBy: .newlines)
             .map { $0.trimmingCharacters(in: .whitespaces) }
-            .forEach { line in
-                guard !line.isEmpty else { return }
-                if let regex = regex,
-                   let match = regex.firstMatch(in: line, range: NSRange(line.startIndex..<line.endIndex, in: line)),
-                   match.numberOfRanges == 3,
-                   let labelRange = Range(match.range(at: 1), in: line),
-                   let valueRange = Range(match.range(at: 2), in: line) {
-                    let label = String(line[labelRange])
-                    let value = String(line[valueRange])
-                    results.append((label, value))
-                } else if let range = line.range(of: "\\s+(\\S+)$", options: .regularExpression) {
-                    let label = String(line[..<range.lowerBound])
-                    let value = String(line[range.upperBound...])
-                    results.append((label, value))
-                }
+            .filter { !$0.isEmpty }
+
+        // First attempt to parse label/value pairs that occur on the same line
+        for line in lines {
+            if let regex = regex,
+               let match = regex.firstMatch(in: line, range: NSRange(line.startIndex..<line.endIndex, in: line)),
+               match.numberOfRanges == 3,
+               let labelRange = Range(match.range(at: 1), in: line),
+               let valueRange = Range(match.range(at: 2), in: line) {
+                let label = String(line[labelRange])
+                let value = String(line[valueRange])
+                results.append((label, value))
+            } else if let range = line.range(of: "\\s+(\\S+)$", options: .regularExpression) {
+                let label = String(line[..<range.lowerBound])
+                let value = String(line[range.upperBound...])
+                results.append((label, value))
             }
+        }
+
+        // If no pairs were detected, try pairing the first half of the lines
+        // with the second half. This handles cases where OCR reads two columns
+        // of labels and values as separate line groups.
+        if results.isEmpty && !lines.isEmpty && lines.count % 2 == 0 {
+            let half = lines.count / 2
+            let labels = lines.prefix(half)
+            let values = lines.suffix(half)
+            if labels.count == values.count {
+                results = Array(zip(labels, values))
+            }
+        }
 
         return results
     }
