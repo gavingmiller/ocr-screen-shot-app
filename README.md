@@ -33,4 +33,5 @@ This repository now includes an `OCRScreenShotApp.xcodeproj` file. Open this pro
 
 ## Output
 
-<img width="335" alt="image" src="https://github.com/user-attachments/assets/c6a95b3e-9c42-473e-b5f7-c3ff2b7be78f" />
+<img width="350" alt="image" src="https://github.com/user-attachments/assets/60a3c0f3-b51d-43c7-9875-0933d7eeb65f" />
+
