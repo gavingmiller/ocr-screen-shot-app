@@ -18,6 +18,7 @@ This sample project demonstrates how to pick screenshots from the photo library,
 - Send extracted values to the provided Google Form.
 - Display a list of processed screenshots with an indicator for upload success or failure.
 - View extracted stats in a table on the detail screen.
+- Save stats locally using the **Add to Analysis Database** button for later review.
 
 ## Setup
 
