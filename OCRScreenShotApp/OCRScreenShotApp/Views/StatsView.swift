@@ -10,6 +10,13 @@ struct StatsView: View {
         return OCRResultFields()
     }
 
+    private var parsedPairs: [(String, String)] {
+        if let text = photoData.ocrText {
+            return OCRProcessor.shared.parsePairs(from: text)
+        }
+        return []
+    }
+
     private var statusText: String {
         switch photoData.postStatus {
         case .none:
@@ -40,7 +47,14 @@ struct StatsView: View {
                 if !fields.cells.isEmpty { Text("Cells: \(fields.cells)") }
                 if !fields.shards.isEmpty { Text("Shards: \(fields.shards)") }
 
-                if let text = photoData.ocrText {
+                if !parsedPairs.isEmpty {
+                    Text("\nStats:")
+                        .font(.headline)
+                    ForEach(parsedPairs.indices, id: \.self) { index in
+                        let pair = parsedPairs[index]
+                        Text("\(pair.0): \(pair.1)")
+                    }
+                } else if let text = photoData.ocrText {
                     Text("\nRecognized Text:")
                         .font(.headline)
                     Text(text)
