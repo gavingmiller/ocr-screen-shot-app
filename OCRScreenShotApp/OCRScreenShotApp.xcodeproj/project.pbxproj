@@ -7,42 +7,16 @@
 	objects = {
 
 /* Begin PBXContainerItemProxy section */
-		DE1A1C562DEA9202000B4BDF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DE1A1C3D2DEA9201000B4BDF /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = DE1A1C442DEA9201000B4BDF;
-			remoteInfo = OCRScreenShotApp;
-		};
-		DE1A1C602DEA9202000B4BDF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DE1A1C3D2DEA9201000B4BDF /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = DE1A1C442DEA9201000B4BDF;
-			remoteInfo = OCRScreenShotApp;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		DE1A1C452DEA9201000B4BDF /* OCRScreenShotApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OCRScreenShotApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		DE1A1C552DEA9202000B4BDF /* OCRScreenShotAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OCRScreenShotAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		DE1A1C5F2DEA9202000B4BDF /* OCRScreenShotAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OCRScreenShotAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		DE1A1C472DEA9201000B4BDF /* OCRScreenShotApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = OCRScreenShotApp;
-			sourceTree = "<group>";
-		};
-		DE1A1C582DEA9202000B4BDF /* OCRScreenShotAppTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = OCRScreenShotAppTests;
-			sourceTree = "<group>";
-		};
-		DE1A1C622DEA9202000B4BDF /* OCRScreenShotAppUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = OCRScreenShotAppUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -76,8 +50,6 @@
 			isa = PBXGroup;
 			children = (
 				DE1A1C472DEA9201000B4BDF /* OCRScreenShotApp */,
-				DE1A1C582DEA9202000B4BDF /* OCRScreenShotAppTests */,
-				DE1A1C622DEA9202000B4BDF /* OCRScreenShotAppUITests */,
 				DE1A1C462DEA9201000B4BDF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -86,8 +58,6 @@
 			isa = PBXGroup;
 			children = (
 				DE1A1C452DEA9201000B4BDF /* OCRScreenShotApp.app */,
-				DE1A1C552DEA9202000B4BDF /* OCRScreenShotAppTests.xctest */,
-				DE1A1C5F2DEA9202000B4BDF /* OCRScreenShotAppUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -117,52 +87,6 @@
 			productReference = DE1A1C452DEA9201000B4BDF /* OCRScreenShotApp.app */;
 			productType = "com.apple.product-type.application";
 		};
-		DE1A1C542DEA9202000B4BDF /* OCRScreenShotAppTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DE1A1C6C2DEA9202000B4BDF /* Build configuration list for PBXNativeTarget "OCRScreenShotAppTests" */;
-			buildPhases = (
-				DE1A1C512DEA9202000B4BDF /* Sources */,
-				DE1A1C522DEA9202000B4BDF /* Frameworks */,
-				DE1A1C532DEA9202000B4BDF /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				DE1A1C572DEA9202000B4BDF /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				DE1A1C582DEA9202000B4BDF /* OCRScreenShotAppTests */,
-			);
-			name = OCRScreenShotAppTests;
-			packageProductDependencies = (
-			);
-			productName = OCRScreenShotAppTests;
-			productReference = DE1A1C552DEA9202000B4BDF /* OCRScreenShotAppTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		DE1A1C5E2DEA9202000B4BDF /* OCRScreenShotAppUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DE1A1C6F2DEA9202000B4BDF /* Build configuration list for PBXNativeTarget "OCRScreenShotAppUITests" */;
-			buildPhases = (
-				DE1A1C5B2DEA9202000B4BDF /* Sources */,
-				DE1A1C5C2DEA9202000B4BDF /* Frameworks */,
-				DE1A1C5D2DEA9202000B4BDF /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				DE1A1C612DEA9202000B4BDF /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				DE1A1C622DEA9202000B4BDF /* OCRScreenShotAppUITests */,
-			);
-			name = OCRScreenShotAppUITests;
-			packageProductDependencies = (
-			);
-			productName = OCRScreenShotAppUITests;
-			productReference = DE1A1C5F2DEA9202000B4BDF /* OCRScreenShotAppUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -175,14 +99,6 @@
 				TargetAttributes = {
 					DE1A1C442DEA9201000B4BDF = {
 						CreatedOnToolsVersion = 16.2;
-					};
-					DE1A1C542DEA9202000B4BDF = {
-						CreatedOnToolsVersion = 16.2;
-						TestTargetID = DE1A1C442DEA9201000B4BDF;
-					};
-					DE1A1C5E2DEA9202000B4BDF = {
-						CreatedOnToolsVersion = 16.2;
-						TestTargetID = DE1A1C442DEA9201000B4BDF;
 					};
 				};
 			};
@@ -201,8 +117,6 @@
 			projectRoot = "";
 			targets = (
 				DE1A1C442DEA9201000B4BDF /* OCRScreenShotApp */,
-				DE1A1C542DEA9202000B4BDF /* OCRScreenShotAppTests */,
-				DE1A1C5E2DEA9202000B4BDF /* OCRScreenShotAppUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -256,16 +170,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		DE1A1C572DEA9202000B4BDF /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = DE1A1C442DEA9201000B4BDF /* OCRScreenShotApp */;
-			targetProxy = DE1A1C562DEA9202000B4BDF /* PBXContainerItemProxy */;
-		};
-		DE1A1C612DEA9202000B4BDF /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = DE1A1C442DEA9201000B4BDF /* OCRScreenShotApp */;
-			targetProxy = DE1A1C602DEA9202000B4BDF /* PBXContainerItemProxy */;
-		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
@@ -444,74 +348,6 @@
 			};
 			name = Release;
 		};
-		DE1A1C6D2DEA9202000B4BDF /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.grm.OCRScreenShotAppTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OCRScreenShotApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/OCRScreenShotApp";
-			};
-			name = Debug;
-		};
-		DE1A1C6E2DEA9202000B4BDF /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.grm.OCRScreenShotAppTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OCRScreenShotApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/OCRScreenShotApp";
-			};
-			name = Release;
-		};
-		DE1A1C702DEA9202000B4BDF /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.grm.OCRScreenShotAppUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = OCRScreenShotApp;
-			};
-			name = Debug;
-		};
-		DE1A1C712DEA9202000B4BDF /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.grm.OCRScreenShotAppUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = OCRScreenShotApp;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -529,24 +365,6 @@
 			buildConfigurations = (
 				DE1A1C6A2DEA9202000B4BDF /* Debug */,
 				DE1A1C6B2DEA9202000B4BDF /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		DE1A1C6C2DEA9202000B4BDF /* Build configuration list for PBXNativeTarget "OCRScreenShotAppTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DE1A1C6D2DEA9202000B4BDF /* Debug */,
-				DE1A1C6E2DEA9202000B4BDF /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		DE1A1C6F2DEA9202000B4BDF /* Build configuration list for PBXNativeTarget "OCRScreenShotAppUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DE1A1C702DEA9202000B4BDF /* Debug */,
-				DE1A1C712DEA9202000B4BDF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
