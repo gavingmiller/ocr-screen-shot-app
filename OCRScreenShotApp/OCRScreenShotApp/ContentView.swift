@@ -76,18 +76,8 @@ struct ContentView: View {
                     DispatchQueue.main.async {
                         photoItems[index].ocrText = text
                     }
-                    let fields = OCRProcessor.shared.extractFields(from: text)
-                    GoogleFormPoster.shared.post(fields: fields) { result in
-                        DispatchQueue.main.async {
-                            switch result {
-                            case .success:
-                                photoItems[index].postStatus = .success
-                            case .failure(let error):
-                                print("Google form submission error: \(error.localizedDescription)")
-                                photoItems[index].postStatus = .failure
-                            }
-                        }
-                    }
+                    // Do not auto-submit to Google after OCR. Submission will
+                    // happen from the Stats screen.
                 }
             } else {
                 DispatchQueue.main.async {
