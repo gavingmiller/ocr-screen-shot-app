@@ -1,5 +1,6 @@
 import UIKit
 import Vision
+import Foundation
 
 struct OCRResultFields {
     var tier: String = ""
@@ -58,5 +59,37 @@ class OCRProcessor {
         result.cells = match(for: "cells earned")
         result.shards = match(for: "reroll shards earned")
         return result
+    }
+
+    /// Parse generic key/value pairs from OCR'd text where each line contains a
+    /// label on the left and a value on the right separated by whitespace.
+    func parsePairs(from text: String) -> [(label: String, value: String)] {
+        let regex = try? NSRegularExpression(
+            pattern: "^(.+?)\\s+([0-9][0-9.,]*[A-Za-z]*)$",
+            options: [.anchorsMatchLines]
+        )
+        var results: [(String, String)] = []
+
+        text
+            .components(separatedBy: .newlines)
+            .map { $0.trimmingCharacters(in: .whitespaces) }
+            .forEach { line in
+                guard !line.isEmpty else { return }
+                if let regex = regex,
+                   let match = regex.firstMatch(in: line, range: NSRange(line.startIndex..<line.endIndex, in: line)),
+                   match.numberOfRanges == 3,
+                   let labelRange = Range(match.range(at: 1), in: line),
+                   let valueRange = Range(match.range(at: 2), in: line) {
+                    let label = String(line[labelRange])
+                    let value = String(line[valueRange])
+                    results.append((label, value))
+                } else if let range = line.range(of: "\\s+(\\S+)$", options: .regularExpression) {
+                    let label = String(line[..<range.lowerBound])
+                    let value = String(line[range.upperBound...])
+                    results.append((label, value))
+                }
+            }
+
+        return results
     }
 }
