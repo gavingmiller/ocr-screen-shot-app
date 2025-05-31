@@ -107,17 +107,17 @@ class OCRProcessor {
             .components(separatedBy: .newlines)
             .map { $0.trimmingCharacters(in: .whitespaces) }
             .filter { !$0.isEmpty }
-        let pairCount = lines.count / 2
-        guard pairCount > 0 else { return [] }
-
-        for i in 0..<pairCount {
+        
+        let numberOfFields = 11
+        
+        for i in 0..<numberOfFields {
             let label = lines[i]
-            let value = lines[i + pairCount]
+            let value = lines[i + numberOfFields]
             guard !seenLabels.contains(label) else { continue }
             seenLabels.insert(label)
             results.append((label, value))
         }
         // Only include the first 11 unique label/value pairs
-        return Array(results.prefix(11))
+        return results
     }
 }
