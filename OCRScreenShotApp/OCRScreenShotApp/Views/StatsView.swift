@@ -57,16 +57,7 @@ struct StatsView: View {
             VStack(alignment: .leading, spacing: 8) {
 
                 if !displayPairs.isEmpty {
-                    Text("Stats:")
-                        .font(.headline)
-                        .padding(.top, 8)
                     Grid(alignment: .leading, horizontalSpacing: 16, verticalSpacing: 4) {
-                        GridRow {
-                            Text("Label").bold()
-                            Text("Value").bold()
-                        }
-                        Divider().gridCellColumns(2)
-
                         ForEach(displayPairs.indices, id: \.self) { index in
                             let pair = displayPairs[index]
                             GridRow {
@@ -88,7 +79,6 @@ struct StatsView: View {
             }
             .padding()
         }
-        .navigationTitle("Stats")
     }
 
     private var submitButton: some View {
