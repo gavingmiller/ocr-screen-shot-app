@@ -63,17 +63,25 @@ struct ContentView: View {
             for item in items {
                 var data = PhotoData(item: item)
                 let success = await data.loadImage()
+
+                // Append the data and capture its index so subsequent updates
+                // modify the value stored in the array instead of the local
+                // copy.
+                let index = await MainActor.run { () -> Int in
+                    photoItems.append(data)
+                    return photoItems.count - 1
+                }
+
                 if success {
                     OCRProcessor.shared.recognizeText(in: data.image!) { text in
                         DispatchQueue.main.async {
-                            data.ocrText = text
+                            photoItems[index].ocrText = text
                         }
                     }
                 } else {
-                    data.postStatus = .failure
-                }
-                await MainActor.run {
-                    photoItems.append(data)
+                    await MainActor.run {
+                        photoItems[index].postStatus = .failure
+                    }
                 }
             }
             await MainActor.run {
