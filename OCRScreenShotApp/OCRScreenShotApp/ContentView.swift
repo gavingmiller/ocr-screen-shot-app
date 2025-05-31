@@ -24,26 +24,18 @@ struct ContentView: View {
                     }
                     Spacer()
                 } else {
-                    List(photoItems) { item in
-                        HStack {
-                            if let image = item.image {
-                                Image(uiImage: image)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 100, height: 100)
-                            }
-                            VStack(alignment: .leading) {
-                                Text(item.ocrText ?? "No OCR yet")
-                                switch item.postStatus {
-                                case .none:
-                                    Text("Pending")
-                                        .foregroundColor(.secondary)
-                                case .success:
-                                    Text("Uploaded")
-                                        .foregroundColor(.green)
-                                case .failure:
-                                    Text("Failed")
-                                        .foregroundColor(.red)
+                    ScrollView {
+                        let columns = [GridItem(.adaptive(minimum: 100), spacing: 2)]
+                        LazyVGrid(columns: columns, spacing: 2) {
+                            ForEach($photoItems) { $item in
+                                if let image = item.image {
+                                    NavigationLink(destination: StatsView(photoData: $item)) {
+                                        Image(uiImage: image)
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(minWidth: 100, minHeight: 100)
+                                            .clipped()
+                                    }
                                 }
                             }
                         }
