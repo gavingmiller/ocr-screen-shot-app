@@ -42,8 +42,8 @@ struct ContentView: View {
                     photoLibrary: .shared()) {
                     Text("Pick Photos")
                 }
-                .onChange(of: selectedItems) { _ in
-                    handleResults(selectedItems)
+                .onChange(of: selectedItems) { _, newValue in
+                    handleResults(newValue)
                 }
                 .padding()
             }
