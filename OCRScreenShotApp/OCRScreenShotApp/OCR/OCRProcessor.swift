@@ -61,6 +61,26 @@ class OCRProcessor {
         return result
     }
 
+    /// Remove the text section that starts with "Combat" and continues until
+    /// the last line before a line containing any digits.
+    private func removeCombatSection(from text: String) -> String {
+        var lines = text.components(separatedBy: .newlines)
+        guard let startIndex = lines.firstIndex(where: { $0.range(of: "combat", options: .caseInsensitive) != nil }) else {
+            return text
+        }
+
+        var endIndex = startIndex
+        for i in (startIndex + 1)..<lines.count {
+            if lines[i].rangeOfCharacter(from: .decimalDigits) != nil {
+                break
+            }
+            endIndex = i
+        }
+
+        lines.removeSubrange(startIndex...endIndex)
+        return lines.joined(separator: "\n")
+    }
+
     /// Parse generic key/value pairs from OCR'd text where each line contains a
     /// label on the left and a value on the right separated by whitespace.
     func parsePairs(from text: String) -> [(label: String, value: String)] {
@@ -79,7 +99,8 @@ class OCRProcessor {
             trimmedText = text
         }
 
-        trimmedText
+        let cleanedText = removeCombatSection(from: trimmedText)
+        cleanedText
             .components(separatedBy: .newlines)
             .map { $0.trimmingCharacters(in: .whitespaces) }
             .forEach { line in
