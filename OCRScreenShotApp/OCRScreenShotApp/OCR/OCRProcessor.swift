@@ -44,7 +44,7 @@ class OCRProcessor {
 
     func extractFields(from text: String) -> OCRResultFields {
         func match(for label: String) -> String {
-            if let range = text.range(of: "\(label\)\s*([0-9:]+)", options: .regularExpression) {
+            if let range = text.range(of: "\(label)\\s*([0-9:]+)", options: .regularExpression) {
                 return String(text[range]).replacingOccurrences(of: label, with: "").trimmingCharacters(in: .whitespaces)
             }
             return ""
