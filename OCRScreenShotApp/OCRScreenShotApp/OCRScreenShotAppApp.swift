@@ -1,3 +1,10 @@
+//
+//  OCRScreenShotAppApp.swift
+//  OCRScreenShotApp
+//
+//  Created by Gavin Miller on 2025-05-30.
+//
+
 import SwiftUI
 
 @main
