@@ -59,33 +59,29 @@ struct ContentView: View {
     }
 
     private func handleResults(_ items: [PhotosPickerItem]) {
-        for item in items {
-            let data = PhotoData(item: item)
-            photoItems.append(data)
-            loadImage(for: data)
-        }
-        selectedItems.removeAll()
-    }
-
-    private func loadImage(for photoData: PhotoData) {
-        guard let index = photoItems.firstIndex(where: { $0.id == photoData.id }) else { return }
         Task {
-            let success = await photoItems[index].loadImage()
-            if success {
-                OCRProcessor.shared.recognizeText(in: photoItems[index].image!) { text in
-                    DispatchQueue.main.async {
-                        photoItems[index].ocrText = text
+            for item in items {
+                var data = PhotoData(item: item)
+                let success = await data.loadImage()
+                if success {
+                    OCRProcessor.shared.recognizeText(in: data.image!) { text in
+                        DispatchQueue.main.async {
+                            data.ocrText = text
+                        }
                     }
-                    // Do not auto-submit to Google after OCR. Submission will
-                    // happen from the Stats screen.
+                } else {
+                    data.postStatus = .failure
                 }
-            } else {
-                DispatchQueue.main.async {
-                    photoItems[index].postStatus = .failure
+                await MainActor.run {
+                    photoItems.append(data)
                 }
+            }
+            await MainActor.run {
+                selectedItems.removeAll()
             }
         }
     }
+
 }
 
 struct ContentView_Previews: PreviewProvider {
