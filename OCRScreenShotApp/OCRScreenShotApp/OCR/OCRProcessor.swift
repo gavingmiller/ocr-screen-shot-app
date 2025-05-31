@@ -117,7 +117,7 @@ class OCRProcessor {
             seenLabels.insert(label)
             results.append((label, value))
         }
-
-        return results
+        // Only include the first 11 unique label/value pairs
+        return Array(results.prefix(11))
     }
 }
