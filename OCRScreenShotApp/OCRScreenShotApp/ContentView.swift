@@ -79,7 +79,13 @@ struct ContentView: View {
                     let fields = OCRProcessor.shared.extractFields(from: text)
                     GoogleFormPoster.shared.post(fields: fields) { result in
                         DispatchQueue.main.async {
-                            photoItems[index].postStatus = result ? .success : .failure
+                            switch result {
+                            case .success:
+                                photoItems[index].postStatus = .success
+                            case .failure(let error):
+                                print("Google form submission error: \(error.localizedDescription)")
+                                photoItems[index].postStatus = .failure
+                            }
                         }
                     }
                 }

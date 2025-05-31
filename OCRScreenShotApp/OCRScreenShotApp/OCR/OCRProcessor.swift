@@ -90,7 +90,8 @@ class OCRProcessor {
     /// Parse generic key/value pairs from OCR'd text where each line contains a
     /// label on the left and a value on the right separated by whitespace.
     func parsePairs(from text: String) -> [(label: String, value: String)] {
-        var pairSet: Set<LabelValuePair> = []
+        var results: [(String, String)] = []
+        var seenLabels = Set<String>()
 
         // Remove any text before "Battle Report" to avoid extraneous lines
         let trimmedText: String
@@ -106,15 +107,17 @@ class OCRProcessor {
             .components(separatedBy: .newlines)
             .map { $0.trimmingCharacters(in: .whitespaces) }
             .filter { !$0.isEmpty }
-        let pairCount = min(11, lines.count / 2)
+        let pairCount = lines.count / 2
         guard pairCount > 0 else { return [] }
 
         for i in 0..<pairCount {
             let label = lines[i]
             let value = lines[i + pairCount]
-            pairSet.insert(LabelValuePair(label: label, value: value))
+            guard !seenLabels.contains(label) else { continue }
+            seenLabels.insert(label)
+            results.append((label, value))
         }
 
-        return pairSet.map { ($0.label, $0.value) }
+        return results
     }
 }

@@ -3,11 +3,20 @@ import SwiftUI
 struct StatsView: View {
     @Binding var photoData: PhotoData
 
+    @State private var isPosting = false
+
     private var parsedPairs: [(String, String)] {
         if let text = photoData.ocrText {
             return OCRProcessor.shared.parsePairs(from: text)
         }
         return []
+    }
+
+    private var extractedFields: OCRResultFields {
+        if let text = photoData.ocrText {
+            return OCRProcessor.shared.extractFields(from: text)
+        }
+        return OCRResultFields()
     }
 
     var body: some View {
@@ -40,6 +49,8 @@ struct StatsView: View {
                             Divider().gridCellColumns(2)
                         }
                     }
+
+                    submitButton
                 } else if let text = photoData.ocrText {
                     Text("\nRecognized Text:")
                         .font(.headline)
@@ -51,6 +62,54 @@ struct StatsView: View {
             .padding()
         }
         .navigationTitle("Stats")
+    }
+
+    private var submitButton: some View {
+        Button(action: submit) {
+            if isPosting {
+                ProgressView()
+            } else {
+                switch photoData.postStatus {
+                case .success:
+                    Text("Submitted \u{2705}")
+                case .failure:
+                    Text("Failed \u{274C}")
+                default:
+                    Text("Submit to Google Sheets")
+                }
+            }
+        }
+        .buttonStyle(.borderedProminent)
+        .tint(tintColor)
+        .disabled(isPosting || photoData.postStatus != .none)
+        .padding(.top, 8)
+    }
+
+    private var tintColor: Color {
+        switch photoData.postStatus {
+        case .success:
+            return .green
+        case .failure:
+            return .red
+        default:
+            return .blue
+        }
+    }
+
+    private func submit() {
+        isPosting = true
+        GoogleFormPoster.shared.post(fields: extractedFields) { result in
+            DispatchQueue.main.async {
+                isPosting = false
+                switch result {
+                case .success:
+                    photoData.postStatus = .success
+                case .failure(let error):
+                    print("Google form submission error: \(error.localizedDescription)")
+                    photoData.postStatus = .failure
+                }
+            }
+        }
     }
 }
 
