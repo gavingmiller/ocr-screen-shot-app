@@ -18,19 +18,15 @@ struct PhotoData: Identifiable {
         self.item = item
     }
 
-    mutating func loadImage(completion: @escaping (Bool) -> Void) {
-        Task {
-            if let data = try? await item.loadTransferable(type: Data.self),
-               let uiImage = UIImage(data: data) {
-                await MainActor.run {
-                    self.image = uiImage
-                    completion(true)
-                }
-            } else {
-                await MainActor.run {
-                    completion(false)
-                }
+    mutating func loadImage() async -> Bool {
+        if let data = try? await item.loadTransferable(type: Data.self),
+           let uiImage = UIImage(data: data) {
+            await MainActor.run {
+                self.image = uiImage
             }
+            return true
+        } else {
+            return false
         }
     }
 }
