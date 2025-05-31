@@ -12,6 +12,33 @@ struct StatsView: View {
         return []
     }
 
+    private var statsModel: StatsModel? {
+        if let text = photoData.ocrText {
+            let pairs = OCRProcessor.shared.parsePairs(from: text)
+            return StatsModel(pairs: pairs)
+        }
+        return nil
+    }
+
+    private var displayPairs: [(String, String)] {
+        if let model = statsModel {
+            return [
+                ("Game Time", model.gameTime),
+                ("Real Time", model.realTime),
+                ("Tier", model.tier),
+                ("Wave", model.wave),
+                ("Killed By", model.killedBy),
+                ("Coins Earned", model.coinsEarned),
+                ("Cash Earned", model.cashEarned),
+                ("Interest Earned", model.interestEarned),
+                ("Gem Blocks Tapped", model.gemBlocksTapped),
+                ("Cells Earned", model.cellsEarned),
+                ("Reroll Shards Earned", model.rerollShardsEarned)
+            ]
+        }
+        return parsedPairs
+    }
+
     private var extractedFields: OCRResultFields {
         if let text = photoData.ocrText {
             return OCRProcessor.shared.extractFields(from: text)
@@ -29,7 +56,7 @@ struct StatsView: View {
 
             VStack(alignment: .leading, spacing: 8) {
 
-                if !parsedPairs.isEmpty {
+                if !displayPairs.isEmpty {
                     Text("Stats:")
                         .font(.headline)
                         .padding(.top, 8)
@@ -40,8 +67,8 @@ struct StatsView: View {
                         }
                         Divider().gridCellColumns(2)
 
-                        ForEach(parsedPairs.indices, id: \.self) { index in
-                            let pair = parsedPairs[index]
+                        ForEach(displayPairs.indices, id: \.self) { index in
+                            let pair = displayPairs[index]
                             GridRow {
                                 Text(pair.0)
                                 Text(pair.1)
