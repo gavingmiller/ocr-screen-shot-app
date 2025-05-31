@@ -1,1 +1,26 @@
-# ocr-screen-shot-app
+# OCR Screenshot App (iOS)
+
+This sample project demonstrates how to pick screenshots from the photo library, perform OCR on each image, extract game related stats and upload the results to a Google Form. Each screenshot is listed with a success or failure indicator after uploading.
+
+## Features
+
+- Select one or more images using `PhotosPicker`.
+- Perform text recognition using the Vision framework.
+- Parse recognized text for the following fields:
+  - **tier**
+  - **wave**
+  - **real time (duration)**
+  - **coins earned**
+  - **cells earned**
+  - **reroll shards earned**
+- Send extracted values to the provided Google Form.
+- Display a list of processed screenshots with an indicator for upload success or failure.
+
+## Setup
+
+1. Open the `OCRScreenShotApp` folder in Xcode.
+2. Replace the placeholder entry IDs in `GoogleFormPoster.swift` with the actual field entry IDs from your Google Form.
+3. Build and run on an iOS device running iOS 16 or later.
+
+This repository does not include an Xcode project file. Simply add these Swift source files to a new SwiftUI iOS project.
+
