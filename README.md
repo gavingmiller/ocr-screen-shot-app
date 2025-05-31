@@ -15,6 +15,7 @@ This sample project demonstrates how to pick screenshots from the photo library,
   - **reroll shards earned**
 - Send extracted values to the provided Google Form.
 - Display a list of processed screenshots with an indicator for upload success or failure.
+- View extracted stats in a table on the detail screen.
 
 ## Setup
 

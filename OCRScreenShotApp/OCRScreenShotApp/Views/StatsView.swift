@@ -40,19 +40,58 @@ struct StatsView: View {
                 Text("Status: \(statusText)")
                     .font(.headline)
 
-                if !fields.tier.isEmpty { Text("Tier: \(fields.tier)") }
-                if !fields.wave.isEmpty { Text("Wave: \(fields.wave)") }
-                if !fields.realTime.isEmpty { Text("Real Time: \(fields.realTime)") }
-                if !fields.coins.isEmpty { Text("Coins: \(fields.coins)") }
-                if !fields.cells.isEmpty { Text("Cells: \(fields.cells)") }
-                if !fields.shards.isEmpty { Text("Shards: \(fields.shards)") }
+                Grid(alignment: .leading, horizontalSpacing: 16, verticalSpacing: 4) {
+                    GridRow {
+                        Text("Field").bold()
+                        Text("Value").bold()
+                    }
+                    Divider().gridCellColumns(2)
+
+                    if !fields.tier.isEmpty {
+                        GridRow { Text("Tier") ; Text(fields.tier) }
+                        Divider().gridCellColumns(2)
+                    }
+                    if !fields.wave.isEmpty {
+                        GridRow { Text("Wave") ; Text(fields.wave) }
+                        Divider().gridCellColumns(2)
+                    }
+                    if !fields.realTime.isEmpty {
+                        GridRow { Text("Real Time") ; Text(fields.realTime) }
+                        Divider().gridCellColumns(2)
+                    }
+                    if !fields.coins.isEmpty {
+                        GridRow { Text("Coins") ; Text(fields.coins) }
+                        Divider().gridCellColumns(2)
+                    }
+                    if !fields.cells.isEmpty {
+                        GridRow { Text("Cells") ; Text(fields.cells) }
+                        Divider().gridCellColumns(2)
+                    }
+                    if !fields.shards.isEmpty {
+                        GridRow { Text("Shards") ; Text(fields.shards) }
+                        Divider().gridCellColumns(2)
+                    }
+                }
 
                 if !parsedPairs.isEmpty {
-                    Text("\nStats:")
+                    Text("Stats:")
                         .font(.headline)
-                    ForEach(parsedPairs.indices, id: \.self) { index in
-                        let pair = parsedPairs[index]
-                        Text("\(pair.0): \(pair.1)")
+                        .padding(.top, 8)
+                    Grid(alignment: .leading, horizontalSpacing: 16, verticalSpacing: 4) {
+                        GridRow {
+                            Text("Label").bold()
+                            Text("Value").bold()
+                        }
+                        Divider().gridCellColumns(2)
+
+                        ForEach(parsedPairs.indices, id: \.self) { index in
+                            let pair = parsedPairs[index]
+                            GridRow {
+                                Text(pair.0)
+                                Text(pair.1)
+                            }
+                            Divider().gridCellColumns(2)
+                        }
                     }
                 } else if let text = photoData.ocrText {
                     Text("\nRecognized Text:")
