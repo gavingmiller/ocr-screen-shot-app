@@ -12,7 +12,7 @@ class GoogleFormPoster {
     private let cellsEntry = "entry.567890"
     private let shardsEntry = "entry.678901"
 
-    func post(fields: OCRResultFields, completion: @escaping (Bool) -> Void) {
+    func post(fields: OCRResultFields, completion: @escaping (Result<Void, Error>) -> Void) {
         var request = URLRequest(url: formURL)
         request.httpMethod = "POST"
         let body = [
@@ -31,11 +31,21 @@ class GoogleFormPoster {
         request.httpBody = body.data(using: .utf8)
 
         let task = URLSession.shared.dataTask(with: request) { _, response, error in
-            guard let http = response as? HTTPURLResponse, error == nil else {
-                completion(false)
+            if let error = error {
+                completion(.failure(error))
                 return
             }
-            completion(http.statusCode == 200)
+            guard let http = response as? HTTPURLResponse else {
+                let err = NSError(domain: "GoogleFormPoster", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid response"])
+                completion(.failure(err))
+                return
+            }
+            if http.statusCode == 200 {
+                completion(.success(()))
+            } else {
+                let err = NSError(domain: "GoogleFormPoster", code: http.statusCode, userInfo: [NSLocalizedDescriptionKey: "HTTP status \(http.statusCode)"])
+                completion(.failure(err))
+            }
         }
         task.resume()
     }
