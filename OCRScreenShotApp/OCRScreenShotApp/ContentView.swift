@@ -62,10 +62,13 @@ struct ContentView: View {
 
     private func loadImage(for photoData: PhotoData) {
         guard let index = photoItems.firstIndex(where: { $0.id == photoData.id }) else { return }
-        photoItems[index].loadImage { success in
+        Task {
+            let success = await photoItems[index].loadImage()
             if success {
                 OCRProcessor.shared.recognizeText(in: photoItems[index].image!) { text in
-                    photoItems[index].ocrText = text
+                    DispatchQueue.main.async {
+                        photoItems[index].ocrText = text
+                    }
                     let fields = OCRProcessor.shared.extractFields(from: text)
                     GoogleFormPoster.shared.post(fields: fields) { result in
                         DispatchQueue.main.async {
@@ -74,7 +77,9 @@ struct ContentView: View {
                     }
                 }
             } else {
-                photoItems[index].postStatus = .failure
+                DispatchQueue.main.async {
+                    photoItems[index].postStatus = .failure
+                }
             }
         }
     }
