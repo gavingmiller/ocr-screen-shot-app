@@ -5,7 +5,6 @@ import UIKit
 struct ContentView: View {
     @State private var selectedItems: [PhotosPickerItem] = []
     @State private var photoItems: [PhotoData] = []
-    @StateObject private var authManager = GoogleAuthManager.shared
 
     private var tierAnalysis: (coins: String, cells: String, shards: String)? {
         let models = photoItems.compactMap { $0.statsModel }
@@ -115,24 +114,8 @@ struct ContentView: View {
                     Text("Tower Analysis")
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    if !authManager.isSignedIn {
-                        signInButton
-                    }
-                }
             }
         }
-    }
-
-    private var signInButton: some View {
-        Button("Sign in with Google", action: signIn)
-            .buttonStyle(.borderedProminent)
-    }
-
-    private func signIn() {
-        guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let root = scene.windows.first(where: { $0.isKeyWindow })?.rootViewController else { return }
-        authManager.signIn(presenting: root)
     }
 
     private func handleResults(_ items: [PhotosPickerItem]) {
@@ -154,10 +137,6 @@ struct ContentView: View {
                         DispatchQueue.main.async {
                             photoItems[index].ocrText = text
                         }
-                    }
-                } else {
-                    await MainActor.run {
-                        photoItems[index].postStatus = .failure
                     }
                 }
             }

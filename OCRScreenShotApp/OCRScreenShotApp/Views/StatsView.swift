@@ -4,11 +4,9 @@ import SwiftUI
 struct StatsView: View {
     @Binding var photoData: PhotoData
 
-    @State private var isPosting = false
     @State private var isAdded = false
     @State private var isEditing = false
     @State private var editPairs: [(String, String)] = []
-    @StateObject private var authManager = GoogleAuthManager.shared
 
     private var parsedPairs: [(String, String)] {
         if let text = photoData.ocrText,
@@ -40,15 +38,6 @@ struct StatsView: View {
         }
         return parsedPairs
     }
-
-    private var extractedFields: OCRResultFields {
-        if let text = photoData.ocrText,
-           !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            return OCRProcessor.shared.extractFields(from: text)
-        }
-        return OCRResultFields()
-    }
-
     var body: some View {
         ScrollView {
             if let image = photoData.image {
@@ -74,7 +63,6 @@ struct StatsView: View {
                     }
 
                     HStack {
-                        submitButton
                         analysisButton
                         Button("Edit Stats") { startEditing() }
                             .padding(.leading)
@@ -145,29 +133,6 @@ struct StatsView: View {
         isEditing = false
     }
 
-    private var submitButton: some View {
-        Button(action: submit) {
-            if isPosting {
-                ProgressView()
-            } else if statsModel?.hasParsingError == true {
-                Text("Parsing error cannot submit")
-            } else {
-                switch photoData.postStatus {
-                case .success:
-                    Text("Submitted \u{2705}")
-                case .failure:
-                    Text("Failed \u{274C}")
-                default:
-                    Text("Submit to Google Sheets")
-                }
-            }
-        }
-        .buttonStyle(.borderedProminent)
-        .tint(tintColor)
-        .disabled(isPosting || photoData.postStatus != .none || !authManager.isSignedIn || statsModel?.hasParsingError == true)
-        .padding(.top, 8)
-    }
-
     private var analysisButton: some View {
         Button(action: addToDatabase) {
             if isAdded {
@@ -179,33 +144,6 @@ struct StatsView: View {
         .buttonStyle(.bordered)
         .disabled(isAdded || statsModel == nil)
         .padding(.top, 8)
-    }
-
-    private var tintColor: Color {
-        switch photoData.postStatus {
-        case .success:
-            return .green
-        case .failure:
-            return .red
-        default:
-            return .blue
-        }
-    }
-
-    private func submit() {
-        isPosting = true
-        GoogleFormPoster.shared.post(fields: extractedFields) { result in
-            DispatchQueue.main.async {
-                isPosting = false
-                switch result {
-                case .success:
-                    photoData.postStatus = .success
-                case .failure(let error):
-                    print("Google form submission error: \(error.localizedDescription)")
-                    photoData.postStatus = .failure
-                }
-            }
-        }
     }
 
     private func addToDatabase() {
