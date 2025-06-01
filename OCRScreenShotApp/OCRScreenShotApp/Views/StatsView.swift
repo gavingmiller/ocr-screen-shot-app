@@ -6,6 +6,9 @@ struct StatsView: View {
 
     @State private var isPosting = false
     @State private var isAdded = false
+    @State private var isEditing = false
+    @State private var editPairs: [(String, String)] = []
+    @StateObject private var authManager = GoogleAuthManager.shared
 
     private var parsedPairs: [(String, String)] {
         if let text = photoData.ocrText,
@@ -62,7 +65,9 @@ struct StatsView: View {
 
             VStack(alignment: .leading, spacing: 8) {
 
-                if !displayPairs.isEmpty {
+                if isEditing {
+                    editingView
+                } else if !displayPairs.isEmpty {
                     Grid(alignment: .leading, horizontalSpacing: 16, verticalSpacing: 4) {
                         ForEach(displayPairs.indices, id: \.self) { index in
                             let pair = displayPairs[index]
@@ -77,6 +82,8 @@ struct StatsView: View {
                     HStack {
                         submitButton
                         analysisButton
+                        Button("Edit Stats") { startEditing() }
+                            .padding(.leading)
                     }
                 } else if let text = photoData.ocrText,
                           !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -85,6 +92,8 @@ struct StatsView: View {
                     Text(text)
                         .font(.footnote)
                         .padding(.top, 2)
+                    Button("Edit Stats") { startEditing() }
+                        .padding(.top, 8)
                 } else {
                     Text("Invalid image")
                         .font(.headline)
@@ -93,12 +102,54 @@ struct StatsView: View {
             }
             .padding()
         }
+        .onAppear {
+            if statsModel == nil,
+               let text = photoData.ocrText,
+               !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                startEditing()
+            }
+        }
+    }
+
+    private var editingView: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Grid(alignment: .leading, horizontalSpacing: 16, verticalSpacing: 4) {
+                ForEach(editPairs.indices, id: \.self) { index in
+                    GridRow {
+                        TextField("Label", text: $editPairs[index].0)
+                        TextField("Value", text: $editPairs[index].1)
+                    }
+                    Divider().gridCellColumns(2)
+                }
+            }
+            HStack {
+                Button("Save") { saveEdits() }
+                Button("Cancel") { isEditing = false }
+            }
+            .padding(.top, 8)
+        }
+    }
+
+    private func startEditing() {
+        if editPairs.isEmpty {
+            editPairs = !displayPairs.isEmpty ? displayPairs : parsedPairs
+        }
+        isEditing = true
+    }
+
+    private func saveEdits() {
+        let text = editPairs.map { "\($0.0)\n\($0.1)" }.joined(separator: "\n")
+        photoData.ocrText = text
+        editPairs.removeAll()
+        isEditing = false
     }
 
     private var submitButton: some View {
         Button(action: submit) {
             if isPosting {
                 ProgressView()
+            } else if statsModel?.hasParsingError == true {
+                Text("Parsing error cannot submit")
             } else {
                 switch photoData.postStatus {
                 case .success:
@@ -112,7 +163,7 @@ struct StatsView: View {
         }
         .buttonStyle(.borderedProminent)
         .tint(tintColor)
-        .disabled(isPosting || photoData.postStatus != .none)
+        .disabled(isPosting || photoData.postStatus != .none || !authManager.isSignedIn || statsModel?.hasParsingError == true)
         .padding(.top, 8)
     }
 
