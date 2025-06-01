@@ -8,6 +8,14 @@ struct StatsView: View {
     @State private var isEditing = false
     @State private var editPairs: [(String, String)] = []
 
+    private static let efficiencyFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 2
+        formatter.minimumFractionDigits = 0
+        return formatter
+    }()
+
     private var parsedPairs: [(String, String)] {
         if let text = photoData.ocrText,
            !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -30,14 +38,14 @@ struct StatsView: View {
                 ("Wave", model.wave),
                 ("Killed By", model.killedBy),
                 ("Coins Earned", model.coinsEarned),
-                ("Coin Efficiency", String(format: "%.2f", model.coinEfficiency)),
+                ("Coin Efficiency", Self.efficiencyFormatter.string(from: NSNumber(value: model.coinEfficiency)) ?? "0"),
                 ("Cash Earned", model.cashEarned),
                 ("Interest Earned", model.interestEarned),
                 ("Gem Blocks Tapped", model.gemBlocksTapped),
                 ("Cells Earned", model.cellsEarned),
-                ("Cell Efficiency", String(format: "%.2f", model.cellEfficiency)),
+                ("Cell Efficiency", Self.efficiencyFormatter.string(from: NSNumber(value: model.cellEfficiency)) ?? "0"),
                 ("Reroll Shards Earned", model.rerollShardsEarned),
-                ("Shard Efficiency", String(format: "%.2f", model.shardEfficiency))
+                ("Shard Efficiency", Self.efficiencyFormatter.string(from: NSNumber(value: model.shardEfficiency)) ?? "0")
             ]
         }
         return parsedPairs
@@ -62,7 +70,7 @@ struct StatsView: View {
                                 Text(pair.0)
                                 if pair.0.contains("Efficiency") {
                                     Text(pair.1)
-                                        .foregroundColor(Color(red: 1.0, green: 0.84, blue: 0.0))
+                                        .foregroundColor(Color(red: 0.9, green: 0.72, blue: 0.0))
                                 } else {
                                     Text(pair.1)
                                 }
