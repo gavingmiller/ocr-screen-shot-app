@@ -108,6 +108,7 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("Tower Analysis")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     if !authManager.isSignedIn {
