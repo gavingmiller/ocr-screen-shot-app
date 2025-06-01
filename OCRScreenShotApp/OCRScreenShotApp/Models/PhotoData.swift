@@ -1,5 +1,7 @@
 import SwiftUI
 import PhotosUI
+import Photos
+import ImageIO
 
 struct PhotoData: Identifiable {
     let id = UUID()
@@ -7,6 +9,7 @@ struct PhotoData: Identifiable {
     var image: UIImage?
     var ocrText: String?
     var statsModel: StatsModel?
+    var creationDate: Date?
 
     init(item: PhotosPickerItem) {
         self.item = item
@@ -44,6 +47,25 @@ struct PhotoData: Identifiable {
             await MainActor.run {
                 self.image = cropped
             }
+
+            if let id = item.itemIdentifier {
+                let assets = PHAsset.fetchAssets(withLocalIdentifiers: [id], options: nil)
+                self.creationDate = assets.firstObject?.creationDate
+            } else if let source = CGImageSourceCreateWithData(data as CFData, nil),
+                      let props = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [CFString: Any] {
+                if let exif = props[kCGImagePropertyExifDictionary] as? [CFString: Any],
+                   let dateStr = exif[kCGImagePropertyExifDateTimeOriginal] as? String {
+                    let df = DateFormatter()
+                    df.dateFormat = "yyyy:MM:dd HH:mm:ss"
+                    self.creationDate = df.date(from: dateStr)
+                } else if let tiff = props[kCGImagePropertyTIFFDictionary] as? [CFString: Any],
+                          let dateStr = tiff[kCGImagePropertyTIFFDateTime] as? String {
+                    let df = DateFormatter()
+                    df.dateFormat = "yyyy:MM:dd HH:mm:ss"
+                    self.creationDate = df.date(from: dateStr)
+                }
+            }
+
             return true
         } else {
             return false

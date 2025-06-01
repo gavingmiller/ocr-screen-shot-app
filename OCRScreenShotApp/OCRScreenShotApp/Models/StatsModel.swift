@@ -2,7 +2,7 @@ import Foundation
 
 /// Model representing the parsed stats from a screenshot. Conforms to
 /// ``Codable`` so entries can be persisted.
-struct StatsModel: Codable {
+struct StatsModel: Codable, Equatable {
     var gameTime: String = ""
     var realTime: String = ""
     var tier: String = ""
@@ -17,6 +17,9 @@ struct StatsModel: Codable {
     /// Indicates at least one field failed validation when creating the model
     var hasParsingError: Bool = false
 
+    /// The creation date of the screenshot this model was generated from
+    var photoDate: Date? = nil
+
     // Computed values stored for analysis
     var duration: Double = 0
     var coinsValue: Double = 0
@@ -26,9 +29,11 @@ struct StatsModel: Codable {
     var coinEfficiency: Double = 0
     var shardEfficiency: Double = 0
 
-    init(pairs: [(String, String)]) {
+    init(pairs: [(String, String)], photoDate: Date? = nil) {
         let dict = Dictionary(uniqueKeysWithValues: pairs.map { ($0.0.lowercased(), $0.1) })
         var hadError = false
+
+        self.photoDate = photoDate
 
         if let time = StatsModel.normalizeTime(dict["game time"] ?? "") {
             self.gameTime = time
