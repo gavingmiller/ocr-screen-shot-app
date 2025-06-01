@@ -147,8 +147,6 @@ struct ContentView: View {
                     OCRProcessor.shared.recognizeText(in: data.image!) { text in
                         DispatchQueue.main.async {
                             photoItems[index].ocrText = text
-                            let pairs = OCRProcessor.shared.parsePairs(from: text)
-                            photoItems[index].statsModel = StatsModel(pairs: pairs)
                         }
                     }
                 } else {
