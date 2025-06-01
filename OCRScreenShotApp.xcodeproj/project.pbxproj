@@ -9,7 +9,6 @@
   1A2B3C4D5E6F7A0000000020 /* OCRScreenShotApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7A0000000010 /* OCRScreenShotApp.swift */; };
   1A2B3C4D5E6F7A0000000021 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7A0000000011 /* ContentView.swift */; };
   1A2B3C4D5E6F7A0000000022 /* PhotoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7A0000000012 /* PhotoData.swift */; };
-  1A2B3C4D5E6F7A0000000023 /* GoogleFormPoster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7A0000000013 /* GoogleFormPoster.swift */; };
   1A2B3C4D5E6F7A0000000024 /* OCRProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7A0000000014 /* OCRProcessor.swift */; };
   1A2B3C4D5E6F7A0000000026 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7A0000000016 /* StatsView.swift */; };
   1A2B3C4D5E6F7A0000000025 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7A0000000015 /* Info.plist */; };
@@ -19,7 +18,6 @@
   1A2B3C4D5E6F7A0000000010 /* OCRScreenShotApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRScreenShotApp.swift; sourceTree = "<group>"; };
   1A2B3C4D5E6F7A0000000011 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
   1A2B3C4D5E6F7A0000000012 /* PhotoData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoData.swift; sourceTree = "<group>"; };
-  1A2B3C4D5E6F7A0000000013 /* GoogleFormPoster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleFormPoster.swift; sourceTree = "<group>"; };
   1A2B3C4D5E6F7A0000000014 /* OCRProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRProcessor.swift; sourceTree = "<group>"; };
   1A2B3C4D5E6F7A0000000016 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/StatsView.swift; sourceTree = "<group>"; };
   1A2B3C4D5E6F7A0000000015 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -33,7 +31,6 @@
       1A2B3C4D5E6F7A0000000010 /* OCRScreenShotApp.swift */,
       1A2B3C4D5E6F7A0000000011 /* ContentView.swift */,
       1A2B3C4D5E6F7A0000000012 /* PhotoData.swift */,
-      1A2B3C4D5E6F7A0000000013 /* GoogleFormPoster.swift */,
       1A2B3C4D5E6F7A0000000014 /* OCRProcessor.swift */,
       1A2B3C4D5E6F7A0000000016 /* StatsView.swift */,
       1A2B3C4D5E6F7A0000000015 /* Info.plist */,
@@ -128,7 +125,6 @@
       1A2B3C4D5E6F7A0000000020 /* OCRScreenShotApp.swift in Sources */,
       1A2B3C4D5E6F7A0000000021 /* ContentView.swift in Sources */,
       1A2B3C4D5E6F7A0000000022 /* PhotoData.swift in Sources */,
-      1A2B3C4D5E6F7A0000000023 /* GoogleFormPoster.swift in Sources */,
       1A2B3C4D5E6F7A0000000024 /* OCRProcessor.swift in Sources */,
       1A2B3C4D5E6F7A0000000026 /* StatsView.swift in Sources */,
     );
