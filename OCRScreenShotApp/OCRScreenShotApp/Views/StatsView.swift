@@ -1,5 +1,4 @@
 import SwiftUI
-import UIKit
 
 struct StatsView: View {
     @Binding var photoData: PhotoData
@@ -74,10 +73,6 @@ struct StatsView: View {
                         }
                     }
 
-                    if !authManager.isSignedIn {
-                        signInButton
-                    }
-
                     submitButton
                 } else if let text = photoData.ocrText,
                           !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -117,17 +112,6 @@ struct StatsView: View {
         .tint(tintColor)
         .disabled(isPosting || photoData.postStatus != .none || !authManager.isSignedIn || statsModel?.hasParsingError == true)
         .padding(.top, 8)
-    }
-
-    private var signInButton: some View {
-        Button("Sign in with Google", action: signIn)
-            .buttonStyle(.borderedProminent)
-    }
-
-    private func signIn() {
-        guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let root = scene.windows.first(where: { $0.isKeyWindow })?.rootViewController else { return }
-        authManager.signIn(presenting: root)
     }
 
     private var tintColor: Color {
