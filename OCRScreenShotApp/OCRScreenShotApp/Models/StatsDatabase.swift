@@ -32,8 +32,15 @@ final class StatsDatabase: ObservableObject {
     ///
     /// If the provided ``StatsModel`` contains a parsing error the entry is
     /// ignored to prevent invalid data from polluting the history.
+
+    /// Check if the given stats entry is already stored in the database.
+    func contains(_ stats: StatsModel) -> Bool {
+        entries.contains(stats)
+    }
+
     func add(_ stats: StatsModel) {
         guard !stats.hasParsingError else { return }
+        guard !contains(stats) else { return }
         entries.append(stats)
         save()
     }

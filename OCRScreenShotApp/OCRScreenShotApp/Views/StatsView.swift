@@ -20,7 +20,7 @@ struct StatsView: View {
         photoData.statsModel
     }
 
-    private var displayPairs: [(String, String)] {
+    private var basePairs: [(String, String)] {
         if let model = statsModel {
             return [
                 ("Game Time", model.gameTime),
@@ -37,6 +37,17 @@ struct StatsView: View {
             ]
         }
         return parsedPairs
+    }
+
+    private var displayPairs: [(String, String)] {
+        var pairs = basePairs
+        if let date = photoData.creationDate {
+            let formatter = DateFormatter()
+            formatter.dateStyle = .short
+            formatter.timeStyle = .short
+            pairs.insert(("Date", formatter.string(from: date)), at: 0)
+        }
+        return pairs
     }
     var body: some View {
         ScrollView {
@@ -96,6 +107,11 @@ struct StatsView: View {
                     startEditing()
                 }
             }
+            if let stats = photoData.statsModel {
+                isAdded = StatsDatabase.shared.contains(stats)
+            } else {
+                isAdded = false
+            }
         }
     }
 
@@ -120,7 +136,7 @@ struct StatsView: View {
 
     private func startEditing() {
         if editPairs.isEmpty {
-            editPairs = !displayPairs.isEmpty ? displayPairs : parsedPairs
+            editPairs = !basePairs.isEmpty ? basePairs : parsedPairs
         }
         isEditing = true
     }
@@ -129,6 +145,9 @@ struct StatsView: View {
         let text = editPairs.map { "\($0.0)\n\($0.1)" }.joined(separator: "\n")
         photoData.ocrText = text
         photoData.statsModel = StatsModel(pairs: editPairs)
+        if let stats = photoData.statsModel {
+            isAdded = StatsDatabase.shared.contains(stats)
+        }
         editPairs.removeAll()
         isEditing = false
     }
@@ -151,7 +170,7 @@ struct StatsView: View {
     private func addToDatabase() {
         guard let stats = statsModel, !stats.hasParsingError else { return }
         StatsDatabase.shared.add(stats)
-        isAdded = true
+        isAdded = StatsDatabase.shared.contains(stats)
     }
 }
 

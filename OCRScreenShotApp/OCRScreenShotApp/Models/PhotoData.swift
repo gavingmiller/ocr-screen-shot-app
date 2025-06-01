@@ -1,5 +1,6 @@
 import SwiftUI
 import PhotosUI
+import Photos
 
 struct PhotoData: Identifiable {
     let id = UUID()
@@ -7,6 +8,7 @@ struct PhotoData: Identifiable {
     var image: UIImage?
     var ocrText: String?
     var statsModel: StatsModel?
+    var creationDate: Date?
 
     init(item: PhotosPickerItem) {
         self.item = item
@@ -44,6 +46,12 @@ struct PhotoData: Identifiable {
             await MainActor.run {
                 self.image = cropped
             }
+
+            if let id = item.itemIdentifier {
+                let assets = PHAsset.fetchAssets(withLocalIdentifiers: [id], options: nil)
+                self.creationDate = assets.firstObject?.creationDate
+            }
+
             return true
         } else {
             return false

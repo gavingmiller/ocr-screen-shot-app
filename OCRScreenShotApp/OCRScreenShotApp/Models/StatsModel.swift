@@ -2,7 +2,7 @@ import Foundation
 
 /// Model representing the parsed stats from a screenshot. Conforms to
 /// ``Codable`` so entries can be persisted.
-struct StatsModel: Codable {
+struct StatsModel: Codable, Equatable {
     var gameTime: String = ""
     var realTime: String = ""
     var tier: String = ""
