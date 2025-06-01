@@ -19,13 +19,7 @@ struct StatsView: View {
     }
 
     private var statsModel: StatsModel? {
-        if let text = photoData.ocrText,
-           !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            let pairs = OCRProcessor.shared.parsePairs(from: text)
-            guard !pairs.isEmpty else { return nil }
-            return StatsModel(pairs: pairs)
-        }
-        return nil
+        photoData.statsModel
     }
 
     private var displayPairs: [(String, String)] {
@@ -103,10 +97,16 @@ struct StatsView: View {
             .padding()
         }
         .onAppear {
-            if statsModel == nil,
+            if photoData.statsModel == nil,
                let text = photoData.ocrText,
                !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                startEditing()
+                let pairs = OCRProcessor.shared.parsePairs(from: text)
+                if !pairs.isEmpty {
+                    photoData.statsModel = StatsModel(pairs: pairs)
+                }
+                if photoData.statsModel == nil {
+                    startEditing()
+                }
             }
         }
     }
@@ -140,6 +140,7 @@ struct StatsView: View {
     private func saveEdits() {
         let text = editPairs.map { "\($0.0)\n\($0.1)" }.joined(separator: "\n")
         photoData.ocrText = text
+        photoData.statsModel = StatsModel(pairs: editPairs)
         editPairs.removeAll()
         isEditing = false
     }
