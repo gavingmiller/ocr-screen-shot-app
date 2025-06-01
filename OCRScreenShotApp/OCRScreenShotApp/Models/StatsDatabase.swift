@@ -29,7 +29,11 @@ final class StatsDatabase: ObservableObject {
     }
 
     /// Add a new stats record to the database and persist the change.
+    ///
+    /// If the provided ``StatsModel`` contains a parsing error the entry is
+    /// ignored to prevent invalid data from polluting the history.
     func add(_ stats: StatsModel) {
+        guard !stats.hasParsingError else { return }
         entries.append(stats)
         save()
     }
