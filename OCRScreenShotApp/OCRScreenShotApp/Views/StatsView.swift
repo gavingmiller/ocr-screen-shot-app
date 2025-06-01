@@ -25,15 +25,19 @@ struct StatsView: View {
             return [
                 ("Game Time", model.gameTime),
                 ("Real Time", model.realTime),
+                ("Duration", String(format: "%.0f", model.duration)),
                 ("Tier", model.tier),
                 ("Wave", model.wave),
                 ("Killed By", model.killedBy),
                 ("Coins Earned", model.coinsEarned),
+                ("Coin Efficiency", String(format: "%.2f", model.coinEfficiency)),
                 ("Cash Earned", model.cashEarned),
                 ("Interest Earned", model.interestEarned),
                 ("Gem Blocks Tapped", model.gemBlocksTapped),
                 ("Cells Earned", model.cellsEarned),
-                ("Reroll Shards Earned", model.rerollShardsEarned)
+                ("Cell Efficiency", String(format: "%.2f", model.cellEfficiency)),
+                ("Reroll Shards Earned", model.rerollShardsEarned),
+                ("Shard Efficiency", String(format: "%.2f", model.shardEfficiency))
             ]
         }
         return parsedPairs
@@ -56,7 +60,12 @@ struct StatsView: View {
                             let pair = displayPairs[index]
                             GridRow {
                                 Text(pair.0)
-                                Text(pair.1)
+                                if pair.0.contains("Efficiency") {
+                                    Text(pair.1)
+                                        .foregroundColor(Color(red: 1.0, green: 0.84, blue: 0.0))
+                                } else {
+                                    Text(pair.1)
+                                }
                             }
                             Divider().gridCellColumns(2)
                         }
@@ -120,7 +129,12 @@ struct StatsView: View {
 
     private func startEditing() {
         if editPairs.isEmpty {
-            editPairs = !displayPairs.isEmpty ? displayPairs : parsedPairs
+            if !displayPairs.isEmpty {
+                let nonEditable = ["Duration", "Coin Efficiency", "Cell Efficiency", "Shard Efficiency"]
+                editPairs = displayPairs.filter { !nonEditable.contains($0.0) }
+            } else {
+                editPairs = parsedPairs
+            }
         }
         isEditing = true
     }
