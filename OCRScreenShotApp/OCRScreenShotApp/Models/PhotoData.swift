@@ -12,6 +12,7 @@ struct PhotoData: Identifiable {
     let item: PhotosPickerItem
     var image: UIImage?
     var ocrText: String?
+    var statsModel: StatsModel?
     var postStatus: PostStatus = .none
 
     init(item: PhotosPickerItem) {
