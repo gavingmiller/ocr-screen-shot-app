@@ -1,13 +1,18 @@
 import SwiftUI
 import PhotosUI
+import UIKit
 
 struct ContentView: View {
     @State private var selectedItems: [PhotosPickerItem] = []
     @State private var photoItems: [PhotoData] = []
+    @StateObject private var authManager = GoogleAuthManager.shared
 
     var body: some View {
         NavigationView {
             VStack {
+                if !authManager.isSignedIn {
+                    signInButton
+                }
                 if photoItems.isEmpty {
                     Spacer()
                     PhotosPicker(
@@ -56,6 +61,17 @@ struct ContentView: View {
             }
             .navigationTitle("OCR Screen Shot")
         }
+    }
+
+    private var signInButton: some View {
+        Button("Sign in with Google", action: signIn)
+            .buttonStyle(.borderedProminent)
+    }
+
+    private func signIn() {
+        guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let root = scene.windows.first(where: { $0.isKeyWindow })?.rootViewController else { return }
+        authManager.signIn(presenting: root)
     }
 
     private func handleResults(_ items: [PhotosPickerItem]) {
