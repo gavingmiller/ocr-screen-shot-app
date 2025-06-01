@@ -36,16 +36,17 @@ struct ContentView: View {
         )
     }
 
-    @ViewBuilder
     private var analysisView: some View {
-        if let analysis = tierAnalysis {
-            HStack(spacing: 8) {
-                tierBox(label: "Best Coins Tier", value: analysis.coins)
-                tierBox(label: "Best Cells Tier", value: analysis.cells)
-                tierBox(label: "Best Reroll Tier", value: analysis.shards)
-            }
-            .padding()
+        let coins = (tierAnalysis?.coins).flatMap { $0.isEmpty ? nil : $0 } ?? "N/A"
+        let cells = (tierAnalysis?.cells).flatMap { $0.isEmpty ? nil : $0 } ?? "N/A"
+        let shards = (tierAnalysis?.shards).flatMap { $0.isEmpty ? nil : $0 } ?? "N/A"
+
+        return HStack(spacing: 8) {
+            tierBox(label: "Best Coins Tier", value: coins)
+            tierBox(label: "Best Cells Tier", value: cells)
+            tierBox(label: "Best Reroll Tier", value: shards)
         }
+        .padding()
     }
 
     var body: some View {
@@ -170,6 +171,10 @@ struct ContentView: View {
         }
         .padding(8)
         .frame(maxWidth: .infinity)
+        .background(
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color(.systemGray6))
+        )
         .overlay(
             RoundedRectangle(cornerRadius: 8)
                 .stroke(Color.primary, lineWidth: 1)
