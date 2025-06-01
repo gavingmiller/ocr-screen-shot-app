@@ -59,7 +59,7 @@ struct ContentView: View {
 
     var body: some View {
         NavigationView {
-            VStack {
+            VStack(spacing: 0) {
                 if photoItems.isEmpty {
                     Spacer()
                     PhotosPicker(
@@ -106,6 +106,7 @@ struct ContentView: View {
                         .padding()
                     }
                 }
+                analysisView
             }
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
@@ -119,9 +120,6 @@ struct ContentView: View {
                         signInButton
                     }
                 }
-            }
-            .safeAreaInset(edge: .bottom) {
-                analysisView
             }
         }
     }
