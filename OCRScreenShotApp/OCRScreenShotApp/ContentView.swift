@@ -10,18 +10,15 @@ struct ContentView: View {
         let models = photoItems.compactMap { $0.statsModel }
         guard !models.isEmpty else { return nil }
 
-        func intValue(_ value: String) -> Int {
-            return Int(value.filter { $0.isNumber }) ?? 0
-        }
-
-        func bestTier(for keyPath: KeyPath<StatsModel, String>) -> String {
+        func bestTier(for keyPath: KeyPath<StatsModel, Double>) -> String {
             let groups = Dictionary(grouping: models, by: { $0.tier })
             var bestTier = ""
-            var best = 0
+            var bestAverage = 0.0
             for (tier, items) in groups {
-                let total = items.reduce(0) { $0 + intValue($1[keyPath: keyPath]) }
-                if total > best {
-                    best = total
+                let sum = items.reduce(0.0) { $0 + $1[keyPath: keyPath] }
+                let average = sum / Double(items.count)
+                if average > bestAverage {
+                    bestAverage = average
                     bestTier = tier
                 }
             }
@@ -29,9 +26,9 @@ struct ContentView: View {
         }
 
         return (
-            coins: bestTier(for: \StatsModel.coinsEarned),
-            cells: bestTier(for: \StatsModel.cellsEarned),
-            shards: bestTier(for: \StatsModel.rerollShardsEarned)
+            coins: bestTier(for: \StatsModel.coinEfficiency),
+            cells: bestTier(for: \StatsModel.cellEfficiency),
+            shards: bestTier(for: \StatsModel.shardEfficiency)
         )
     }
 
