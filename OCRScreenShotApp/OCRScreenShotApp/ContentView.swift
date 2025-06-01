@@ -92,20 +92,22 @@ struct ContentView: View {
                                 }
                             }
                         }
+
+                        PhotosPicker(
+                            selection: $selectedItems,
+                            maxSelectionCount: nil,
+                            matching: .images,
+                            photoLibrary: .shared()
+                        ) {
+                            Text("Add Photos")
+                        }
+                        .onChange(of: selectedItems) { _ in
+                            handleResults(selectedItems)
+                        }
+                        .padding()
+
+                        analysisView
                     }
-                    PhotosPicker(
-                        selection: $selectedItems,
-                        maxSelectionCount: nil,
-                        matching: .images,
-                        photoLibrary: .shared()
-                    ) {
-                        Text("Add Photos")
-                    }
-                    .onChange(of: selectedItems) { _ in
-                        handleResults(selectedItems)
-                    }
-                    .padding()
-                    analysisView
                 }
             }
             .navigationTitle("OCR Screen Shot")
