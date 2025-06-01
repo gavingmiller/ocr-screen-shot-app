@@ -47,6 +47,14 @@ struct ContentView: View {
             tierBox(label: "Best Reroll Tier", value: shards)
         }
         .padding()
+        .frame(maxWidth: .infinity)
+        .background(Color(UIColor.systemBackground))
+        .overlay(
+            Rectangle()
+                .fill(Color.black)
+                .frame(height: 1),
+            alignment: .top
+        )
     }
 
     var body: some View {
