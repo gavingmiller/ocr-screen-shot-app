@@ -15,9 +15,6 @@ class GoogleFormPoster {
     func post(fields: OCRResultFields, completion: @escaping (Result<Void, Error>) -> Void) {
         var request = URLRequest(url: formURL)
         request.httpMethod = "POST"
-        if let token = GoogleAuthManager.shared.idToken {
-            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        }
         let body = [
             tierEntry: fields.tier,
             waveEntry: fields.wave,
