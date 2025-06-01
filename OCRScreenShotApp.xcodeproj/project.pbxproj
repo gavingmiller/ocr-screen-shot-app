@@ -151,7 +151,7 @@
     isa = XCBuildConfiguration;
     buildSettings = {
       ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-      INFOPLIST_FILE = OCRScreenShotApp/Info.plist;
+      INFOPLIST_FILE = OCRScreenShotApp/OCRScreenShotApp/Info.plist;
       PRODUCT_BUNDLE_IDENTIFIER = com.example.OCRScreenShotApp;
       PRODUCT_NAME = $(TARGET_NAME);
       SWIFT_VERSION = 5.9;
@@ -163,7 +163,7 @@
     isa = XCBuildConfiguration;
     buildSettings = {
       ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-      INFOPLIST_FILE = OCRScreenShotApp/Info.plist;
+      INFOPLIST_FILE = OCRScreenShotApp/OCRScreenShotApp/Info.plist;
       PRODUCT_BUNDLE_IDENTIFIER = com.example.OCRScreenShotApp;
       PRODUCT_NAME = $(TARGET_NAME);
       SWIFT_VERSION = 5.9;
