@@ -39,19 +39,12 @@ struct ContentView: View {
     @ViewBuilder
     private var analysisView: some View {
         if let analysis = tierAnalysis {
-            VStack(spacing: 4) {
-                Text("Tier Effectiveness")
-                    .font(.headline)
-                HStack {
-                    Text("Coins: \(analysis.coins)")
-                    Spacer()
-                    Text("Cells: \(analysis.cells)")
-                    Spacer()
-                    Text("Reroll: \(analysis.shards)")
-                }
-                .font(.subheadline)
+            HStack(spacing: 8) {
+                tierBox(label: "Best Coins Tier", value: analysis.coins)
+                tierBox(label: "Best Cells Tier", value: analysis.cells)
+                tierBox(label: "Best Reroll Tier", value: analysis.shards)
             }
-            .padding(.bottom)
+            .padding()
         }
     }
 
@@ -102,8 +95,6 @@ struct ContentView: View {
                             handleResults(selectedItems)
                         }
                         .padding()
-
-                        analysisView
                     }
                 }
             }
@@ -119,6 +110,9 @@ struct ContentView: View {
                         signInButton
                     }
                 }
+            }
+            .safeAreaInset(edge: .bottom) {
+                analysisView
             }
         }
     }
@@ -164,6 +158,22 @@ struct ContentView: View {
                 selectedItems.removeAll()
             }
         }
+    }
+
+    private func tierBox(label: String, value: String) -> some View {
+        VStack(spacing: 2) {
+            Text(label)
+                .font(.caption)
+            Text(value)
+                .font(.title3)
+                .bold()
+        }
+        .padding(8)
+        .frame(maxWidth: .infinity)
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(Color.primary, lineWidth: 1)
+        )
     }
 
 }
