@@ -58,9 +58,6 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             VStack {
-                if !authManager.isSignedIn {
-                    signInButton
-                }
                 if photoItems.isEmpty {
                     Spacer()
                     PhotosPicker(
@@ -108,7 +105,14 @@ struct ContentView: View {
                     analysisView
                 }
             }
-            .navigationTitle("OCR Screen Shot")
+            .navigationTitle("Tower Analysis")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    if !authManager.isSignedIn {
+                        signInButton
+                    }
+                }
+            }
         }
     }
 

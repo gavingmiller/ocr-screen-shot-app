@@ -1,4 +1,4 @@
-# OCR Screenshot App (iOS)
+# Tower Analysis (iOS)
 
 This project is pure vibe coding an iOS App on OpenAI Codex. Minimal programming done by me directly aside from some XCode debugging.
 
