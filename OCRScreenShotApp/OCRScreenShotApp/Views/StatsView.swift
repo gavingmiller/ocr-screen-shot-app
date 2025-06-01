@@ -172,12 +172,14 @@ struct StatsView: View {
         Button(action: addToDatabase) {
             if isAdded {
                 Text("Added \u{2705}")
+            } else if statsModel?.hasParsingError == true {
+                Text("Parsing error cannot add")
             } else {
                 Text("Add to Analysis Database")
             }
         }
         .buttonStyle(.bordered)
-        .disabled(isAdded || statsModel == nil)
+        .disabled(isAdded || statsModel == nil || statsModel?.hasParsingError == true)
         .padding(.top, 8)
     }
 
@@ -209,7 +211,7 @@ struct StatsView: View {
     }
 
     private func addToDatabase() {
-        guard let stats = statsModel else { return }
+        guard let stats = statsModel, !stats.hasParsingError else { return }
         StatsDatabase.shared.add(stats)
         isAdded = true
     }
