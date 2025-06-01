@@ -1,9 +1,11 @@
 import SwiftUI
 
+// Provides access to `StatsDatabase` for persisting stats locally
 struct StatsView: View {
     @Binding var photoData: PhotoData
 
     @State private var isPosting = false
+    @State private var isAdded = false
     @State private var isEditing = false
     @State private var editPairs: [(String, String)] = []
     @StateObject private var authManager = GoogleAuthManager.shared
@@ -79,6 +81,7 @@ struct StatsView: View {
 
                     HStack {
                         submitButton
+                        analysisButton
                         Button("Edit Stats") { startEditing() }
                             .padding(.leading)
                     }
@@ -164,6 +167,19 @@ struct StatsView: View {
         .padding(.top, 8)
     }
 
+    private var analysisButton: some View {
+        Button(action: addToDatabase) {
+            if isAdded {
+                Text("Added \u{2705}")
+            } else {
+                Text("Add to Analysis Database")
+            }
+        }
+        .buttonStyle(.bordered)
+        .disabled(isAdded || statsModel == nil)
+        .padding(.top, 8)
+    }
+
     private var tintColor: Color {
         switch photoData.postStatus {
         case .success:
@@ -189,6 +205,12 @@ struct StatsView: View {
                 }
             }
         }
+    }
+
+    private func addToDatabase() {
+        guard let stats = statsModel else { return }
+        StatsDatabase.shared.add(stats)
+        isAdded = true
     }
 }
 
