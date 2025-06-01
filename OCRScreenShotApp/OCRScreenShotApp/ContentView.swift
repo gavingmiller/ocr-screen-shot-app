@@ -39,18 +39,23 @@ struct ContentView: View {
     @ViewBuilder
     private var analysisView: some View {
         if let analysis = tierAnalysis {
-            HStack(spacing: 8) {
-                tierBox(label: "Best Coins Tier", value: analysis.coins)
-                tierBox(label: "Best Cells Tier", value: analysis.cells)
-                tierBox(label: "Best Reroll Tier", value: analysis.shards)
+            VStack(spacing: 0) {
+                Divider()
+                HStack(spacing: 8) {
+                    tierBox(label: "Best Coins Tier", value: analysis.coins)
+                    tierBox(label: "Best Cells Tier", value: analysis.cells)
+                    tierBox(label: "Best Reroll Tier", value: analysis.shards)
+                }
+                .padding()
             }
-            .padding()
+            .frame(maxWidth: .infinity)
+            .background(Color.white)
         }
     }
 
     var body: some View {
         NavigationView {
-            VStack {
+            VStack(spacing: 0) {
                 if photoItems.isEmpty {
                     Spacer()
                     PhotosPicker(
@@ -97,6 +102,7 @@ struct ContentView: View {
                         .padding()
                     }
                 }
+                analysisView
             }
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
@@ -110,9 +116,6 @@ struct ContentView: View {
                         signInButton
                     }
                 }
-            }
-            .safeAreaInset(edge: .bottom) {
-                analysisView
             }
         }
     }
