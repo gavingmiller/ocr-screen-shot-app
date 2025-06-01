@@ -17,6 +17,15 @@ struct StatsModel: Codable {
     /// Indicates at least one field failed validation when creating the model
     var hasParsingError: Bool = false
 
+    // Computed values stored for analysis
+    var duration: Double = 0
+    var coinsValue: Double = 0
+    var cellsValue: Double = 0
+    var shardsValue: Double = 0
+    var cellEfficiency: Double = 0
+    var coinEfficiency: Double = 0
+    var shardEfficiency: Double = 0
+
     init(pairs: [(String, String)]) {
         let dict = Dictionary(uniqueKeysWithValues: pairs.map { ($0.0.lowercased(), $0.1) })
         var hadError = false
@@ -34,6 +43,8 @@ struct StatsModel: Codable {
             self.realTime = ""
             hadError = true
         }
+
+        self.duration = StatsModel.timeToSeconds(self.realTime)
 
         if let value = StatsModel.validateRange(dict["tier"] ?? "", min: 1, max: 20) {
             self.tier = value
@@ -63,6 +74,8 @@ struct StatsModel: Codable {
             hadError = true
         }
 
+        self.coinsValue = StatsModel.parseAbbreviatedNumber(self.coinsEarned)
+
         if let value = StatsModel.validateDigitsLetter(dict["cash earned"] ?? "", prefixDollar: true) {
             self.cashEarned = value
         } else {
@@ -91,11 +104,25 @@ struct StatsModel: Codable {
             hadError = true
         }
 
+        self.cellsValue = StatsModel.parseAbbreviatedNumber(self.cellsEarned)
+
         if let value = StatsModel.validateDigitsLetter(dict["reroll shards earned"] ?? "", prefixDollar: false) {
             self.rerollShardsEarned = value
         } else {
             self.rerollShardsEarned = ""
             hadError = true
+        }
+
+        self.shardsValue = StatsModel.parseAbbreviatedNumber(self.rerollShardsEarned)
+
+        if self.duration > 0 {
+            self.cellEfficiency = self.cellsValue / self.duration
+            self.coinEfficiency = self.coinsValue / self.duration
+            self.shardEfficiency = self.shardsValue / self.duration
+        } else {
+            self.cellEfficiency = 0
+            self.coinEfficiency = 0
+            self.shardEfficiency = 0
         }
 
         self.hasParsingError = hadError
@@ -160,5 +187,45 @@ struct StatsModel: Codable {
         }
         return trimmed
     }
+
+    // MARK: - Value Conversion Helpers
+
+    static func timeToSeconds(_ time: String) -> Double {
+        let trimmed = time.trimmingCharacters(in: .whitespaces)
+        let pattern = "^(?:([0-9]+)d\\s*)?([0-9]+)h\\s*([0-9]+)m\\s*([0-9]+)s$"
+        guard let regex = try? NSRegularExpression(pattern: pattern, options: .caseInsensitive),
+              let match = regex.firstMatch(in: trimmed, options: [], range: NSRange(location: 0, length: trimmed.utf16.count)) else {
+            return 0
+        }
+
+        let dayRange = match.range(at: 1)
+        let hasDays = dayRange.location != NSNotFound && dayRange.length > 0
+        let days = hasDays ? Double(String(trimmed[Range(dayRange, in: trimmed)!])) ?? 0 : 0
+        let hours = Double(String(trimmed[Range(match.range(at: 2), in: trimmed)!])) ?? 0
+        let minutes = Double(String(trimmed[Range(match.range(at: 3), in: trimmed)!])) ?? 0
+        let seconds = Double(String(trimmed[Range(match.range(at: 4), in: trimmed)!])) ?? 0
+
+        return days * 24 * 3600 + hours * 3600 + minutes * 60 + seconds
+    }
+
+    private static let multipliers: [Character: Double] = [
+        "k": 1_000,
+        "m": 1_000_000,
+        "b": 1_000_000_000,
+        "t": 1_000_000_000_000,
+        "q": 1_000_000_000_000_000
+    ]
+
+    static func parseAbbreviatedNumber(_ value: String) -> Double {
+        let cleaned = value.replacingOccurrences(of: "$", with: "").lowercased()
+        guard let suffix = cleaned.last,
+              let multiplier = multipliers[suffix] else { return 0 }
+        let numberPart = cleaned.dropLast()
+        return (Double(String(numberPart)) ?? 0) * multiplier
+    }
+
+    func coins() -> Double { coinsValue }
+    func cells() -> Double { cellsValue }
+    func shards() -> Double { shardsValue }
 }
 
