@@ -107,9 +107,13 @@ struct ContentView: View {
                     }
                 }
             }
-            .navigationTitle("Tower Analysis")
+            .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("Tower Analysis")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     if !authManager.isSignedIn {
                         signInButton
