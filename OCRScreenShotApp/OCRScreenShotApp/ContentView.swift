@@ -48,7 +48,13 @@ struct ContentView: View {
         }
         .padding()
         .frame(maxWidth: .infinity)
-        .background(Color.white)
+        .background(Color(UIColor.systemBackground))
+        .overlay(
+            Rectangle()
+                .fill(Color.black)
+                .frame(height: 1),
+            alignment: .top
+        )
     }
 
     var body: some View {
