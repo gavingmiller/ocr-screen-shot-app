@@ -2,7 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CLIENT_ID</key>
-	<string>118326613834-s1ef2eisrgaapcvuoqof3mmatqo979q8</string>
+        <key>CLIENT_ID</key>
+        <string>118326613834-s1ef2eisrgaapcvuoqof3mmatqo979q8</string>
+        <key>NSPhotoLibraryUsageDescription</key>
+        <string>This app requires access to your photo library to analyze screenshots.</string>
+        <key>NSPhotoLibraryAddUsageDescription</key>
+        <string>Photos are temporarily stored when processing your screenshots.</string>
 </dict>
 </plist>
