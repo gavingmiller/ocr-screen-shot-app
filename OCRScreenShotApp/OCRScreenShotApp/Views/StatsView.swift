@@ -2,13 +2,26 @@ import SwiftUI
 
 // Provides access to `StatsDatabase` for persisting stats locally
 struct StatsView: View {
-    @Binding var photoData: PhotoData
+    @Binding var photoItems: [PhotoData]
+    let indices: [Int]
+    @State private var currentIndex: Int
     var onParseSuccess: (() -> Void)? = nil
 
     @State private var isAdded = false
     @State private var isEditing = false
     @State private var editPairs: [(String, String)] = []
     @ObservedObject private var db = StatsDatabase.shared
+    init(photoItems: Binding<[PhotoData]>, indices: [Int], startIndex: Int, onParseSuccess: (() -> Void)? = nil) {
+        self._photoItems = photoItems
+        self.indices = indices
+        self._currentIndex = State(initialValue: startIndex)
+        self.onParseSuccess = onParseSuccess
+    }
+
+    private var photoData: Binding<PhotoData> {
+        Binding(get: { photoItems[indices[currentIndex]] },
+                set: { photoItems[indices[currentIndex]] = $0 })
+    }
 
     private static let dateFormatter: DateFormatter = {
         let df = DateFormatter()
@@ -167,6 +180,18 @@ struct StatsView: View {
         .onReceive(db.$entries) { _ in
             checkIfAdded()
         }
+        .toolbar {
+            ToolbarItemGroup(placement: .navigationBarTrailing) {
+                Button(action: previousItem) {
+                    Image(systemName: "chevron.left")
+                }
+                .disabled(currentIndex == 0)
+                Button(action: nextItem) {
+                    Image(systemName: "chevron.right")
+                }
+                .disabled(currentIndex >= indices.count - 1)
+            }
+        }
     }
 
     private var editingView: some View {
@@ -242,6 +267,22 @@ struct StatsView: View {
         .padding(.top, 8)
         .frame(maxWidth: isAdded ? .infinity : nil)
     }
+    private func previousItem() {
+        guard currentIndex > 0 else { return }
+        currentIndex -= 1
+        isEditing = false
+        editPairs.removeAll()
+        checkIfAdded()
+    }
+
+    private func nextItem() {
+        guard currentIndex < indices.count - 1 else { return }
+        currentIndex += 1
+        isEditing = false
+        editPairs.removeAll()
+        checkIfAdded()
+    }
+
 
     private func addToDatabase() {
         guard let stats = statsModel, !stats.hasParsingError else { return }
