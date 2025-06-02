@@ -12,6 +12,7 @@ struct StatsView: View {
     @State private var isEditing = false
     @State private var editPairs: [(String, String)] = []
     @ObservedObject private var db = StatsDatabase.shared
+    @Environment(\.dismiss) private var dismiss
     init(photoItems: Binding<[PhotoData]>, indices: [Int], startIndex: Int, onParseSuccess: (() -> Void)? = nil) {
         self._photoItems = photoItems
         self.indices = indices
@@ -131,13 +132,15 @@ struct StatsView: View {
                     }
 
                     HStack {
-                        if isAdded {
-                            analysisButton
-                                .frame(maxWidth: .infinity)
-                        } else {
-                            analysisButton
+                        analysisButton
+                        if !isAdded {
                             Button("Edit Stats") { startEditing() }
                                 .padding(.leading)
+                        }
+                        Spacer()
+                        Button(action: deleteCurrent) {
+                            Text("Delete")
+                                .foregroundColor(.red)
                         }
                     }
                 } else if let text = photoData.wrappedValue.ocrText,
@@ -273,7 +276,6 @@ struct StatsView: View {
         .buttonStyle(.bordered)
         .disabled(isAdded || isDuplicate || statsModel == nil || statsModel?.hasParsingError == true)
         .padding(.top, 8)
-        .frame(maxWidth: (isAdded || isDuplicate) ? .infinity : nil)
     }
     private func previousItem() {
         guard currentIndex > 0 else { return }
@@ -291,6 +293,13 @@ struct StatsView: View {
         checkIfAdded()
     }
 
+    private func deleteCurrent() {
+        if let model = photoData.wrappedValue.statsModel {
+            StatsDatabase.shared.remove(model)
+        }
+        photoItems.remove(at: indices[currentIndex])
+        dismiss()
+    }
 
     private func addToDatabase() {
         guard let stats = statsModel, !stats.hasParsingError else { return }
