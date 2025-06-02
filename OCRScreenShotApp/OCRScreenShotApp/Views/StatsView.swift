@@ -116,9 +116,14 @@ struct StatsView: View {
                     }
 
                     HStack {
-                        analysisButton
-                        Button("Edit Stats") { startEditing() }
-                            .padding(.leading)
+                        if isAdded {
+                            analysisButton
+                                .frame(maxWidth: .infinity)
+                        } else {
+                            analysisButton
+                            Button("Edit Stats") { startEditing() }
+                                .padding(.leading)
+                        }
                     }
                 } else if let text = photoData.ocrText,
                           !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -127,8 +132,10 @@ struct StatsView: View {
                     Text(text)
                         .font(.footnote)
                         .padding(.top, 2)
-                    Button("Edit Stats") { startEditing() }
-                        .padding(.top, 8)
+                    if !isAdded {
+                        Button("Edit Stats") { startEditing() }
+                            .padding(.top, 8)
+                    }
                 } else {
                     Text("Invalid image")
                         .font(.headline)
@@ -224,6 +231,7 @@ struct StatsView: View {
         .buttonStyle(.bordered)
         .disabled(isAdded || statsModel == nil || statsModel?.hasParsingError == true)
         .padding(.top, 8)
+        .frame(maxWidth: isAdded ? .infinity : nil)
     }
 
     private func addToDatabase() {
