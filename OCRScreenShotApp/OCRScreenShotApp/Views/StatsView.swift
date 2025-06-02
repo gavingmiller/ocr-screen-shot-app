@@ -8,6 +8,7 @@ struct StatsView: View {
     var onParseSuccess: (() -> Void)? = nil
 
     @State private var isAdded = false
+    @State private var isDuplicate = false
     @State private var isEditing = false
     @State private var editPairs: [(String, String)] = []
     @ObservedObject private var db = StatsDatabase.shared
@@ -245,16 +246,23 @@ struct StatsView: View {
         editPairs.removeAll()
         isEditing = false
         if let stats = photoData.statsModel, stats.hasParsingError == false {
-            StatsDatabase.shared.add(stats)
-            isAdded = true
-            photoData.isAdded = true
+            let added = StatsDatabase.shared.add(stats)
+            if added {
+                isAdded = true
+                photoData.isAdded = true
+            } else if StatsDatabase.shared.isDuplicate(stats) {
+                isDuplicate = true
+                photoData.isDuplicate = true
+            }
             onParseSuccess?()
         }
     }
 
     private var analysisButton: some View {
         Button(action: addToDatabase) {
-            if isAdded {
+            if isDuplicate {
+                Text("Duplicate \u{1F501}")
+            } else if isAdded {
                 Text("Added \u{2705}")
             } else if statsModel?.hasParsingError == true {
                 Text("Parsing error cannot add")
@@ -263,9 +271,9 @@ struct StatsView: View {
             }
         }
         .buttonStyle(.bordered)
-        .disabled(isAdded || statsModel == nil || statsModel?.hasParsingError == true)
+        .disabled(isAdded || isDuplicate || statsModel == nil || statsModel?.hasParsingError == true)
         .padding(.top, 8)
-        .frame(maxWidth: isAdded ? .infinity : nil)
+        .frame(maxWidth: (isAdded || isDuplicate) ? .infinity : nil)
     }
     private func previousItem() {
         guard currentIndex > 0 else { return }
@@ -286,19 +294,29 @@ struct StatsView: View {
 
     private func addToDatabase() {
         guard let stats = statsModel, !stats.hasParsingError else { return }
-        StatsDatabase.shared.add(stats)
-        isAdded = true
-        photoData.isAdded = true
+        let added = StatsDatabase.shared.add(stats)
+        if added {
+            isAdded = true
+            photoData.isAdded = true
+        } else if StatsDatabase.shared.isDuplicate(stats) {
+            isDuplicate = true
+            photoData.isDuplicate = true
+        }
     }
 
     private func checkIfAdded() {
         if let model = photoData.statsModel {
             let added = db.entries.contains(model)
+            let duplicate = db.isDuplicate(model) && !added
             isAdded = added
+            isDuplicate = duplicate
             photoData.isAdded = added
+            photoData.isDuplicate = duplicate
         } else {
             isAdded = false
+            isDuplicate = false
             photoData.isAdded = false
+            photoData.isDuplicate = false
         }
     }
 }

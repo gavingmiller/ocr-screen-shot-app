@@ -28,14 +28,23 @@ final class StatsDatabase: ObservableObject {
         try? data.write(to: saveURL)
     }
 
+    /// Determine whether the database already contains a record matching the
+    /// provided ``StatsModel`` according to the duplicate detection rules.
+    func isDuplicate(_ stats: StatsModel) -> Bool {
+        entries.contains { $0.isDuplicate(of: stats) }
+    }
+
     /// Add a new stats record to the database and persist the change.
     ///
-    /// If the provided ``StatsModel`` contains a parsing error the entry is
-    /// ignored to prevent invalid data from polluting the history.
-    func add(_ stats: StatsModel) {
-        guard !stats.hasParsingError else { return }
-        guard !entries.contains(stats) else { return }
+    /// If the provided ``StatsModel`` contains a parsing error or it matches an
+    /// existing entry based on duplicate detection criteria the entry is not
+    /// stored. The return value indicates whether the stats were added.
+    @discardableResult
+    func add(_ stats: StatsModel) -> Bool {
+        guard !stats.hasParsingError else { return false }
+        guard !isDuplicate(stats) else { return false }
         entries.append(stats)
         save()
+        return true
     }
 }

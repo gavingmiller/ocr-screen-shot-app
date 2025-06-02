@@ -14,6 +14,8 @@ struct PhotoData: Identifiable {
     var isProcessing: Bool = false
     /// Indicates whether the stats for this photo have been added to the database
     var isAdded: Bool = false
+    /// Indicates the stats for this photo match an existing database entry
+    var isDuplicate: Bool = false
 
     init(item: PhotosPickerItem) {
         self.item = item

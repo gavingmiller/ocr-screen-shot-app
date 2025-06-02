@@ -232,5 +232,16 @@ struct StatsModel: Codable, Equatable {
     func coins() -> Double { coinsValue }
     func cells() -> Double { cellsValue }
     func shards() -> Double { shardsValue }
+
+    /// Determine if two stats entries represent the same screenshot based on
+    /// a subset of fields used for duplicate detection.
+    func isDuplicate(of other: StatsModel) -> Bool {
+        return self.photoDate == other.photoDate &&
+            self.wave == other.wave &&
+            self.tier == other.tier &&
+            self.duration == other.duration &&
+            self.coinsEarned == other.coinsEarned &&
+            self.rerollShardsEarned == other.rerollShardsEarned
+    }
 }
 
