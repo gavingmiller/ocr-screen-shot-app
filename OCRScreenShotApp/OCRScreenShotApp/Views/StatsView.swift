@@ -238,13 +238,17 @@ struct StatsView: View {
         guard let stats = statsModel, !stats.hasParsingError else { return }
         StatsDatabase.shared.add(stats)
         isAdded = true
+        photoData.isAdded = true
     }
 
     private func checkIfAdded() {
         if let model = photoData.statsModel {
-            isAdded = db.entries.contains(model)
+            let added = db.entries.contains(model)
+            isAdded = added
+            photoData.isAdded = added
         } else {
             isAdded = false
+            photoData.isAdded = false
         }
     }
 }

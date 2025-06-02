@@ -146,11 +146,23 @@ struct ContentView: View {
     private func gridItem(for item: Binding<PhotoData>) -> some View {
         if let image = item.wrappedValue.image {
             NavigationLink(destination: StatsView(photoData: item)) {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(minWidth: 100, minHeight: 100)
-                    .clipped()
+                ZStack(alignment: .bottomTrailing) {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(minWidth: 100, minHeight: 100)
+                        .clipped()
+
+                    if item.wrappedValue.isProcessing {
+                        ProgressView()
+                            .progressViewStyle(.circular)
+                            .padding(4)
+                    } else if item.wrappedValue.isAdded {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundColor(.green)
+                            .padding(4)
+                    }
+                }
             }
         }
     }
@@ -170,6 +182,7 @@ struct ContentView: View {
         Task {
             for item in items {
                 var data = PhotoData(item: item)
+                data.isProcessing = true
                 let success = await data.loadImage()
 
                 // Append the data and capture its index so subsequent updates
@@ -185,8 +198,15 @@ struct ContentView: View {
                         DispatchQueue.main.async {
                             photoItems[index].ocrText = text
                             let pairs = OCRProcessor.shared.parsePairs(from: text)
-                            photoItems[index].statsModel = StatsModel(pairs: pairs, photoDate: photoItems[index].creationDate)
+                            let model = StatsModel(pairs: pairs, photoDate: photoItems[index].creationDate)
+                            photoItems[index].statsModel = model
+                            photoItems[index].isProcessing = false
+                            photoItems[index].isAdded = StatsDatabase.shared.entries.contains(model)
                         }
+                    }
+                } else {
+                    await MainActor.run {
+                        photoItems[index].isProcessing = false
                     }
                 }
             }

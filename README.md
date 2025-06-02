@@ -16,6 +16,8 @@ This sample project demonstrates how to pick screenshots from the photo library 
   - **cells earned**
   - **reroll shards earned**
 - Display the processed screenshots in a grid for quick access.
+- A spinner appears on each screenshot while OCR processing is underway and a
+  check mark is shown once its stats are saved to the database.
 - View extracted stats in a table on the detail screen.
 - Save stats locally using the **Add to Analysis Database** button for later review.
 
