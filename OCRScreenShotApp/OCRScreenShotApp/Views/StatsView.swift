@@ -3,6 +3,8 @@ import SwiftUI
 // Provides access to `StatsDatabase` for persisting stats locally
 struct StatsView: View {
     @Binding var photoData: PhotoData
+    /// Callback triggered when edited stats parse without errors
+    var onParseSuccess: () -> Void = {}
 
     @State private var isAdded = false
     @State private var isEditing = false
@@ -215,9 +217,13 @@ struct StatsView: View {
 
         let text = editPairs.map { "\($0.0)\n\($0.1)" }.joined(separator: "\n")
         photoData.ocrText = text
-        photoData.statsModel = StatsModel(pairs: editPairs, photoDate: photoData.creationDate)
+        let model = StatsModel(pairs: editPairs, photoDate: photoData.creationDate)
+        photoData.statsModel = model
         editPairs.removeAll()
         isEditing = false
+        if !model.hasParsingError {
+            onParseSuccess()
+        }
     }
 
     private var analysisButton: some View {

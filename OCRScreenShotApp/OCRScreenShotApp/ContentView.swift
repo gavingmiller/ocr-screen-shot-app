@@ -150,7 +150,7 @@ struct ContentView: View {
     @ViewBuilder
     private func gridItem(for item: Binding<PhotoData>) -> some View {
         if !item.wrappedValue.isProcessing, let image = item.wrappedValue.image {
-            NavigationLink(destination: StatsView(photoData: item)) {
+            NavigationLink(destination: StatsView(photoData: item, onParseSuccess: { selectedTab = .analyzed })) {
                 ZStack(alignment: .bottomTrailing) {
                     Image(uiImage: image)
                         .resizable()
