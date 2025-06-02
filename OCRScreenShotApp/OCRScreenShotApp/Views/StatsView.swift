@@ -25,6 +25,14 @@ struct StatsView: View {
         return formatter
     }()
 
+    private static let durationFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 0
+        formatter.minimumFractionDigits = 0
+        return formatter
+    }()
+
     private var parsedPairs: [(String, String)] {
         if let text = photoData.ocrText,
            !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -47,7 +55,7 @@ struct StatsView: View {
             result.append(contentsOf: [
                 ("Game Time", model.gameTime),
                 ("Real Time", model.realTime),
-                ("Duration", String(format: "%.0f", model.duration)),
+                ("Duration", (Self.durationFormatter.string(from: NSNumber(value: model.duration)) ?? "0") + "s"),
                 ("Tier", model.tier),
                 ("Wave", model.wave),
                 ("Killed By", model.killedBy),
