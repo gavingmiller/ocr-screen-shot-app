@@ -59,7 +59,7 @@ struct StatsView: View {
     }()
 
     private var parsedPairs: [(String, String)] {
-        if let text = photoData.ocrText,
+        if let text = photoData.wrappedValue.ocrText,
            !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             return OCRProcessor.shared.parsePairs(from: text)
         }
@@ -67,7 +67,7 @@ struct StatsView: View {
     }
 
     private var statsModel: StatsModel? {
-        photoData.statsModel
+        photoData.wrappedValue.statsModel
     }
 
     private var displayPairs: [(String, String)] {
@@ -103,7 +103,7 @@ struct StatsView: View {
     }
     var body: some View {
         ScrollView {
-            if let image = photoData.image {
+            if let image = photoData.wrappedValue.image {
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFit()
@@ -140,7 +140,7 @@ struct StatsView: View {
                                 .padding(.leading)
                         }
                     }
-                } else if let text = photoData.ocrText,
+                } else if let text = photoData.wrappedValue.ocrText,
                           !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                     Text("\nRecognized Text:")
                         .font(.headline)
@@ -160,22 +160,22 @@ struct StatsView: View {
             .padding()
         }
         .onAppear {
-            if photoData.statsModel == nil,
-               let text = photoData.ocrText,
+            if photoData.wrappedValue.statsModel == nil,
+               let text = photoData.wrappedValue.ocrText,
                !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                 let pairs = OCRProcessor.shared.parsePairs(from: text)
                 if !pairs.isEmpty {
-                    photoData.statsModel = StatsModel(pairs: pairs, photoDate: photoData.creationDate)
+                    photoData.wrappedValue.statsModel = StatsModel(pairs: pairs, photoDate: photoData.wrappedValue.creationDate)
                 }
-                if photoData.statsModel == nil {
+                if photoData.wrappedValue.statsModel == nil {
                     startEditing()
                 }
-            } else if photoData.statsModel?.hasParsingError == true {
+            } else if photoData.wrappedValue.statsModel?.hasParsingError == true {
                 startEditing()
             }
             checkIfAdded()
         }
-        .onChange(of: photoData.statsModel) { _ in
+        .onChange(of: photoData.wrappedValue.statsModel) { _ in
             checkIfAdded()
         }
         .onReceive(db.$entries) { _ in
@@ -241,18 +241,18 @@ struct StatsView: View {
         }
 
         let text = editPairs.map { "\($0.0)\n\($0.1)" }.joined(separator: "\n")
-        photoData.ocrText = text
-        photoData.statsModel = StatsModel(pairs: editPairs, photoDate: photoData.creationDate)
+        photoData.wrappedValue.ocrText = text
+        photoData.wrappedValue.statsModel = StatsModel(pairs: editPairs, photoDate: photoData.wrappedValue.creationDate)
         editPairs.removeAll()
         isEditing = false
-        if let stats = photoData.statsModel, stats.hasParsingError == false {
+        if let stats = photoData.wrappedValue.statsModel, stats.hasParsingError == false {
             let added = StatsDatabase.shared.add(stats)
             if added {
                 isAdded = true
-                photoData.isAdded = true
+                photoData.wrappedValue.isAdded = true
             } else if StatsDatabase.shared.isDuplicate(stats) {
                 isDuplicate = true
-                photoData.isDuplicate = true
+                photoData.wrappedValue.isDuplicate = true
             }
             onParseSuccess?()
         }
@@ -297,26 +297,26 @@ struct StatsView: View {
         let added = StatsDatabase.shared.add(stats)
         if added {
             isAdded = true
-            photoData.isAdded = true
+            photoData.wrappedValue.isAdded = true
         } else if StatsDatabase.shared.isDuplicate(stats) {
             isDuplicate = true
-            photoData.isDuplicate = true
+            photoData.wrappedValue.isDuplicate = true
         }
     }
 
     private func checkIfAdded() {
-        if let model = photoData.statsModel {
+        if let model = photoData.wrappedValue.statsModel {
             let added = db.entries.contains(model)
             let duplicate = db.isDuplicate(model) && !added
             isAdded = added
             isDuplicate = duplicate
-            photoData.isAdded = added
-            photoData.isDuplicate = duplicate
+            photoData.wrappedValue.isAdded = added
+            photoData.wrappedValue.isDuplicate = duplicate
         } else {
             isAdded = false
             isDuplicate = false
-            photoData.isAdded = false
-            photoData.isDuplicate = false
+            photoData.wrappedValue.isAdded = false
+            photoData.wrappedValue.isDuplicate = false
         }
     }
 }
