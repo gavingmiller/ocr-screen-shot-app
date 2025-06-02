@@ -3,6 +3,7 @@ import SwiftUI
 // Provides access to `StatsDatabase` for persisting stats locally
 struct StatsView: View {
     @Binding var photoData: PhotoData
+    var onParseSuccess: (() -> Void)? = nil
 
     @State private var isAdded = false
     @State private var isEditing = false
@@ -218,6 +219,9 @@ struct StatsView: View {
         photoData.statsModel = StatsModel(pairs: editPairs, photoDate: photoData.creationDate)
         editPairs.removeAll()
         isEditing = false
+        if photoData.statsModel?.hasParsingError == false {
+            onParseSuccess?()
+        }
     }
 
     private var analysisButton: some View {
