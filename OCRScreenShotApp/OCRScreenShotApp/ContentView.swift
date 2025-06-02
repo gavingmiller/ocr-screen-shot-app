@@ -144,7 +144,7 @@ struct ContentView: View {
 
     @ViewBuilder
     private func gridItem(for item: Binding<PhotoData>) -> some View {
-        if let image = item.wrappedValue.image {
+        if !item.wrappedValue.isProcessing, let image = item.wrappedValue.image {
             NavigationLink(destination: StatsView(photoData: item)) {
                 ZStack(alignment: .bottomTrailing) {
                     Image(uiImage: image)
@@ -153,11 +153,7 @@ struct ContentView: View {
                         .frame(minWidth: 100, minHeight: 100)
                         .clipped()
 
-                    if item.wrappedValue.isProcessing {
-                        ProgressView()
-                            .progressViewStyle(.circular)
-                            .padding(4)
-                    } else if item.wrappedValue.isAdded {
+                    if item.wrappedValue.isAdded {
                         Image(systemName: "checkmark.circle.fill")
                             .foregroundColor(.green)
                             .padding(4)
@@ -239,6 +235,7 @@ struct ContentView: View {
     private func filteredIndices() -> [Int] {
         photoItems.indices.filter { index in
             let item = photoItems[index]
+            guard !item.isProcessing else { return false }
             switch selectedTab {
             case .analyzed:
                 return item.statsModel?.hasParsingError != true
