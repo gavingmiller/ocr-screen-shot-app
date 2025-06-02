@@ -47,4 +47,10 @@ final class StatsDatabase: ObservableObject {
         save()
         return true
     }
+
+    /// Remove the provided stats from the database and persist the change.
+    func remove(_ stats: StatsModel) {
+        entries.removeAll { $0 == stats }
+        save()
+    }
 }
