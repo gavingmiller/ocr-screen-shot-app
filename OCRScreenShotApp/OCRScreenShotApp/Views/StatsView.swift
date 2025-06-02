@@ -19,8 +19,9 @@ struct StatsView: View {
     private static let efficiencyFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 2
+        formatter.maximumFractionDigits = 0
         formatter.minimumFractionDigits = 0
+        formatter.roundingMode = .floor
         return formatter
     }()
 
