@@ -16,11 +16,20 @@ struct StatsView: View {
         return df
     }()
 
-    private static let efficiencyFormatter: NumberFormatter = {
+    private static let integerEfficiencyFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.maximumFractionDigits = 0
         formatter.minimumFractionDigits = 0
+        formatter.roundingMode = .floor
+        return formatter
+    }()
+
+    private static let decimalEfficiencyFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 2
+        formatter.minimumFractionDigits = 2
         formatter.roundingMode = .floor
         return formatter
     }()
@@ -52,14 +61,14 @@ struct StatsView: View {
                 ("Wave", model.wave),
                 ("Killed By", model.killedBy),
                 ("Coins Earned", model.coinsEarned),
-                ("Coin Efficiency", Self.efficiencyFormatter.string(from: NSNumber(value: model.coinEfficiency)) ?? "0"),
+                ("Coin Efficiency", Self.integerEfficiencyFormatter.string(from: NSNumber(value: model.coinEfficiency)) ?? "0"),
                 ("Cash Earned", model.cashEarned),
                 ("Interest Earned", model.interestEarned),
                 ("Gem Blocks Tapped", model.gemBlocksTapped),
                 ("Cells Earned", model.cellsEarned),
-                ("Cell Efficiency", Self.efficiencyFormatter.string(from: NSNumber(value: model.cellEfficiency)) ?? "0"),
+                ("Cell Efficiency", Self.decimalEfficiencyFormatter.string(from: NSNumber(value: model.cellEfficiency)) ?? "0.00"),
                 ("Reroll Shards Earned", model.rerollShardsEarned),
-                ("Shard Efficiency", Self.efficiencyFormatter.string(from: NSNumber(value: model.shardEfficiency)) ?? "0")
+                ("Shard Efficiency", Self.decimalEfficiencyFormatter.string(from: NSNumber(value: model.shardEfficiency)) ?? "0.00")
             ])
             return result
         }
