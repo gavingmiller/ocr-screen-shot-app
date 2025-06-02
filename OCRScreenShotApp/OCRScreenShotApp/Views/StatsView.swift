@@ -151,7 +151,9 @@ struct StatsView: View {
             }
             HStack {
                 Button("Save") { saveEdits() }
-                Button("Cancel") { isEditing = false }
+                    .buttonStyle(.borderedProminent)
+                Button("Discard", role: .destructive) { isEditing = false }
+                    .buttonStyle(.bordered)
             }
             .padding(.top, 8)
         }
