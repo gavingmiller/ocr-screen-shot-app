@@ -23,29 +23,75 @@ struct ContentView: View {
         }
     }
 
-    private var tierAnalysis: (coins: String, cells: String, shards: String)? {
+    /// Analyze stored stats and determine the best tiers along with a
+    /// recommended tier to refresh if data is stale.
+    private var tierAnalysis: (coins: String, cells: String, shards: String, refresh: String?)? {
         let models = photoItems.compactMap { $0.statsModel }
         guard !models.isEmpty else { return nil }
 
-        func bestTier(for keyPath: KeyPath<StatsModel, Double>) -> String {
-            let groups = Dictionary(grouping: models, by: { $0.tier })
-            var bestTier = ""
-            var bestAverage = 0.0
-            for (tier, items) in groups {
-                let sum = items.reduce(0.0) { $0 + $1[keyPath: keyPath] }
-                let average = sum / Double(items.count)
-                if average > bestAverage {
-                    bestAverage = average
-                    bestTier = tier
-                }
-            }
-            return bestTier
+        struct TierInfo {
+            var tier: Int
+            var avg: Double
+            var isStale: Bool
         }
 
+        func tierInfo(for keyPath: KeyPath<StatsModel, Double>) -> TierInfo? {
+            let groups = Dictionary(grouping: models, by: { Int($0.tier) ?? 0 })
+            let cutoff = Date().addingTimeInterval(-14 * 24 * 3600)
+            var result: TierInfo?
+            for (tier, items) in groups where tier > 0 {
+                let avg = items.reduce(0.0) { $0 + $1[keyPath: keyPath] } / Double(items.count)
+                let latest = items.compactMap { $0.photoDate }.max() ?? .distantPast
+                let stale = latest < cutoff
+                if result == nil || avg > result!.avg {
+                    result = TierInfo(tier: tier, avg: avg, isStale: stale)
+                }
+            }
+            return result
+        }
+
+        func freshTier(for keyPath: KeyPath<StatsModel, Double>) -> Int? {
+            let groups = Dictionary(grouping: models, by: { Int($0.tier) ?? 0 })
+            let cutoff = Date().addingTimeInterval(-14 * 24 * 3600)
+            var best: (tier: Int, avg: Double)?
+            for (tier, items) in groups where tier > 0 {
+                let latest = items.compactMap { $0.photoDate }.max() ?? .distantPast
+                guard latest >= cutoff else { continue }
+                let avg = items.reduce(0.0) { $0 + $1[keyPath: keyPath] } / Double(items.count)
+                if best == nil || avg > best!.avg {
+                    best = (tier, avg)
+                }
+            }
+            return best?.tier
+        }
+
+        func bestString(for keyPath: KeyPath<StatsModel, Double>) -> (String, Int?) {
+            guard let info = tierInfo(for: keyPath) else { return ("N/A", nil) }
+            let fresh = freshTier(for: keyPath)
+            var refresh: Int? = nil
+            if info.isStale {
+                refresh = info.tier
+            } else if let fresh = fresh, abs(fresh - info.tier) <= 3, fresh != info.tier {
+                refresh = fresh
+            }
+            let value = info.isStale ? "\(info.tier)*" : "\(info.tier)"
+            return (value, refresh)
+        }
+
+        let coinInfo = bestString(for: \StatsModel.coinEfficiency)
+        let cellInfo = bestString(for: \StatsModel.cellEfficiency)
+        let shardInfo = bestString(for: \StatsModel.shardEfficiency)
+
+        var refreshTier: String?
+        if let r = coinInfo.1 { refreshTier = String(r) }
+        if let r = cellInfo.1 { refreshTier = refreshTier ?? String(r) }
+        if let r = shardInfo.1 { refreshTier = refreshTier ?? String(r) }
+
         return (
-            coins: bestTier(for: \StatsModel.coinEfficiency),
-            cells: bestTier(for: \StatsModel.cellEfficiency),
-            shards: bestTier(for: \StatsModel.shardEfficiency)
+            coins: coinInfo.0,
+            cells: cellInfo.0,
+            shards: shardInfo.0,
+            refresh: refreshTier
         )
     }
 
@@ -53,11 +99,13 @@ struct ContentView: View {
         let coins = (tierAnalysis?.coins).flatMap { $0.isEmpty ? nil : $0 } ?? "N/A"
         let cells = (tierAnalysis?.cells).flatMap { $0.isEmpty ? nil : $0 } ?? "N/A"
         let shards = (tierAnalysis?.shards).flatMap { $0.isEmpty ? nil : $0 } ?? "N/A"
+        let refresh = tierAnalysis?.refresh ?? "N/A"
 
         return HStack(spacing: 8) {
             tierBox(label: "Best Coins Tier", value: coins)
             tierBox(label: "Best Cells Tier", value: cells)
             tierBox(label: "Best Reroll Tier", value: shards)
+            tierBox(label: "Refresh Tier", value: refresh)
         }
         .padding()
         .frame(maxWidth: .infinity)
