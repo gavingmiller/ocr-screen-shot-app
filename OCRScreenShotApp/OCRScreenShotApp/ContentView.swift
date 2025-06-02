@@ -206,7 +206,11 @@ struct ContentView: View {
                         .frame(minWidth: 100, minHeight: 100)
                         .clipped()
 
-                    if item.wrappedValue.isAdded {
+                    if item.wrappedValue.isDuplicate {
+                        Image(systemName: "exclamationmark.circle.fill")
+                            .foregroundColor(.yellow)
+                            .padding(4)
+                    } else if item.wrappedValue.isAdded {
                         Image(systemName: "checkmark.circle.fill")
                             .foregroundColor(.green)
                             .padding(4)
@@ -251,12 +255,10 @@ struct ContentView: View {
                             photoItems[index].statsModel = model
                             photoItems[index].isProcessing = false
 
-                            let alreadyAdded = StatsDatabase.shared.entries.contains(model)
-                            if !alreadyAdded && !model.hasParsingError {
-                                StatsDatabase.shared.add(model)
-                                photoItems[index].isAdded = true
-                            } else {
-                                photoItems[index].isAdded = alreadyAdded
+                            if !model.hasParsingError {
+                                let added = StatsDatabase.shared.add(model)
+                                photoItems[index].isAdded = added
+                                photoItems[index].isDuplicate = !added && StatsDatabase.shared.isDuplicate(model)
                             }
                         }
                     }
