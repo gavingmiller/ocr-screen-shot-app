@@ -184,17 +184,17 @@ struct ContentView: View {
             let columns = [GridItem(.adaptive(minimum: 100), spacing: 2)]
             let indices = filteredIndices()
             LazyVGrid(columns: columns, spacing: 2) {
-                ForEach(indices, id: \.self) { index in
-                    gridItem(for: $photoItems[index])
+                ForEach(indices, id: .self) { index in
+                    gridItem(for: $photoItems[index], index: index, indices: indices)
                 }
             }
         }
     }
 
     @ViewBuilder
-    private func gridItem(for item: Binding<PhotoData>) -> some View {
+    private func gridItem(for item: Binding<PhotoData>, index: Int, indices: [Int]) -> some View {
         if !item.wrappedValue.isProcessing, let image = item.wrappedValue.image {
-            NavigationLink(destination: StatsView(photoData: item, onParseSuccess: {
+            NavigationLink(destination: StatsView(photoItems: $photoItems, indices: indices, startIndex: indices.firstIndex(of: index) ?? 0, onParseSuccess: {
                 if errorCount == 0 {
                     selectedTab = .analyzed
                 }
