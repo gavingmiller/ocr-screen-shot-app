@@ -34,6 +34,7 @@ final class StatsDatabase: ObservableObject {
     /// ignored to prevent invalid data from polluting the history.
     func add(_ stats: StatsModel) {
         guard !stats.hasParsingError else { return }
+        guard !entries.contains(stats) else { return }
         entries.append(stats)
         save()
     }

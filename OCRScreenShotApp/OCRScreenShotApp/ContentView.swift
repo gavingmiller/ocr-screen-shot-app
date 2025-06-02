@@ -250,7 +250,14 @@ struct ContentView: View {
                             let model = StatsModel(pairs: pairs, photoDate: photoItems[index].creationDate)
                             photoItems[index].statsModel = model
                             photoItems[index].isProcessing = false
-                            photoItems[index].isAdded = StatsDatabase.shared.entries.contains(model)
+
+                            let alreadyAdded = StatsDatabase.shared.entries.contains(model)
+                            if !alreadyAdded && !model.hasParsingError {
+                                StatsDatabase.shared.add(model)
+                                photoItems[index].isAdded = true
+                            } else {
+                                photoItems[index].isAdded = alreadyAdded
+                            }
                         }
                     }
                 } else {
