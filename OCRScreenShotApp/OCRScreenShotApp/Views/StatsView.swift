@@ -169,6 +169,17 @@ struct StatsView: View {
     }
 
     private func saveEdits() {
+        // Automatically prefix cash and interest values with "$" if missing
+        for index in editPairs.indices {
+            let label = editPairs[index].0
+            var value = editPairs[index].1.trimmingCharacters(in: .whitespaces)
+            if (label == "Cash Earned" || label == "Interest Earned") &&
+                !value.isEmpty && !value.hasPrefix("$") {
+                value = "$" + value
+            }
+            editPairs[index].1 = value
+        }
+
         let text = editPairs.map { "\($0.0)\n\($0.1)" }.joined(separator: "\n")
         photoData.ocrText = text
         photoData.statsModel = StatsModel(pairs: editPairs, photoDate: photoData.creationDate)
