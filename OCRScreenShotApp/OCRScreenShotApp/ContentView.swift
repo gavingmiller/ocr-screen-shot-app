@@ -14,11 +14,13 @@ struct ContentView: View {
     private enum Tab: Int, CaseIterable {
         case analyzed
         case errors
+        case archived
 
         var title: String {
             switch self {
             case .analyzed: return "Analyzed"
             case .errors: return "Errors"
+            case .archived: return "Archived"
             }
         }
     }
@@ -93,7 +95,10 @@ struct ContentView: View {
     private var mainContent: some View {
         VStack(spacing: 0) {
             tabsPicker
-            if photoItems.isEmpty {
+            Spacer().frame(height: 5)
+            if selectedTab == .archived {
+                ArchivedView()
+            } else if photoItems.isEmpty {
                 Spacer()
                 photosPickerView
                 Spacer()
@@ -244,6 +249,8 @@ struct ContentView: View {
                 return item.statsModel?.hasParsingError != true
             case .errors:
                 return item.statsModel?.hasParsingError == true
+            case .archived:
+                return false
             }
         }
     }
