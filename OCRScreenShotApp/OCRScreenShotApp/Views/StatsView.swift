@@ -7,6 +7,14 @@ struct StatsView: View {
     @State private var isAdded = false
     @State private var isEditing = false
     @State private var editPairs: [(String, String)] = []
+    @ObservedObject private var db = StatsDatabase.shared
+
+    private static let dateFormatter: DateFormatter = {
+        let df = DateFormatter()
+        df.dateStyle = .medium
+        df.timeStyle = .short
+        return df
+    }()
 
     private static let efficiencyFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
@@ -30,7 +38,12 @@ struct StatsView: View {
 
     private var displayPairs: [(String, String)] {
         if let model = statsModel {
-            return [
+            var result: [(String, String)] = []
+            if let date = model.photoDate {
+                let formatted = StatsView.dateFormatter.string(from: date)
+                result.append(("Photo Date", formatted))
+            }
+            result.append(contentsOf: [
                 ("Game Time", model.gameTime),
                 ("Real Time", model.realTime),
                 ("Duration", String(format: "%.0f", model.duration)),
@@ -46,7 +59,8 @@ struct StatsView: View {
                 ("Cell Efficiency", Self.efficiencyFormatter.string(from: NSNumber(value: model.cellEfficiency)) ?? "0"),
                 ("Reroll Shards Earned", model.rerollShardsEarned),
                 ("Shard Efficiency", Self.efficiencyFormatter.string(from: NSNumber(value: model.shardEfficiency)) ?? "0")
-            ]
+            ])
+            return result
         }
         return parsedPairs
     }
@@ -107,12 +121,19 @@ struct StatsView: View {
                !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                 let pairs = OCRProcessor.shared.parsePairs(from: text)
                 if !pairs.isEmpty {
-                    photoData.statsModel = StatsModel(pairs: pairs)
+                    photoData.statsModel = StatsModel(pairs: pairs, photoDate: photoData.creationDate)
                 }
                 if photoData.statsModel == nil {
                     startEditing()
                 }
             }
+            checkIfAdded()
+        }
+        .onChange(of: photoData.statsModel) { _ in
+            checkIfAdded()
+        }
+        .onReceive(db.$entries) { _ in
+            checkIfAdded()
         }
     }
 
@@ -138,7 +159,7 @@ struct StatsView: View {
     private func startEditing() {
         if editPairs.isEmpty {
             if !displayPairs.isEmpty {
-                let nonEditable = ["Duration", "Coin Efficiency", "Cell Efficiency", "Shard Efficiency"]
+                let nonEditable = ["Photo Date", "Duration", "Coin Efficiency", "Cell Efficiency", "Shard Efficiency"]
                 editPairs = displayPairs.filter { !nonEditable.contains($0.0) }
             } else {
                 editPairs = parsedPairs
@@ -150,7 +171,7 @@ struct StatsView: View {
     private func saveEdits() {
         let text = editPairs.map { "\($0.0)\n\($0.1)" }.joined(separator: "\n")
         photoData.ocrText = text
-        photoData.statsModel = StatsModel(pairs: editPairs)
+        photoData.statsModel = StatsModel(pairs: editPairs, photoDate: photoData.creationDate)
         editPairs.removeAll()
         isEditing = false
     }
@@ -174,6 +195,14 @@ struct StatsView: View {
         guard let stats = statsModel, !stats.hasParsingError else { return }
         StatsDatabase.shared.add(stats)
         isAdded = true
+    }
+
+    private func checkIfAdded() {
+        if let model = photoData.statsModel {
+            isAdded = db.entries.contains(model)
+        } else {
+            isAdded = false
+        }
     }
 }
 
