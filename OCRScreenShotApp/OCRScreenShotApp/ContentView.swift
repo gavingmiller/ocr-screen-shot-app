@@ -184,7 +184,7 @@ struct ContentView: View {
             let columns = [GridItem(.adaptive(minimum: 100), spacing: 2)]
             let indices = filteredIndices()
             LazyVGrid(columns: columns, spacing: 2) {
-                ForEach(indices, id: .self) { index in
+                ForEach(indices, id: \.self) { index in
                     gridItem(for: $photoItems[index], index: index, indices: indices)
                 }
             }
