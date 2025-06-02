@@ -309,15 +309,14 @@ struct ContentView: View {
                     guard model.hasParsingError == true else { return nil }
                 }
 
-                // Exclude duplicates already in the database when not marked as added
-                if !item.isAdded && StatsDatabase.shared.isDuplicate(model) {
-                    return nil
-                }
-
-                // Exclude duplicates within the current photo items
+                // Mark duplicates but continue displaying them so the user
+                // can review screenshots even if they already exist in the
+                // database or match another selected image.
                 let key = "\(model.photoDate?.timeIntervalSince1970 ?? 0)-\(model.wave)-\(model.tier)-\(model.duration)-\(model.coinsEarned)-\(model.rerollShardsEarned)"
-                if seen.contains(key) {
-                    return nil
+                if !item.isAdded && StatsDatabase.shared.isDuplicate(model) {
+                    photoItems[index].isDuplicate = true
+                } else if seen.contains(key) {
+                    photoItems[index].isDuplicate = true
                 }
                 seen.insert(key)
 
