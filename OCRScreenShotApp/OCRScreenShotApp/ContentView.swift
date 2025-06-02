@@ -102,10 +102,10 @@ struct ContentView: View {
         let refresh = tierAnalysis?.refresh ?? "N/A"
 
         return HStack(spacing: 8) {
-            tierBox(label: "Best Coins Tier", value: coins)
-            tierBox(label: "Best Cells Tier", value: cells)
-            tierBox(label: "Best Reroll Tier", value: shards)
-            tierBox(label: "Refresh Tier", value: refresh)
+            tierBox(label: "Best Coins", value: coins)
+            tierBox(label: "Best Cells", value: cells)
+            tierBox(label: "Best Reroll", value: shards)
+            tierBox(label: "Refresh", value: refresh)
         }
         .padding()
         .frame(maxWidth: .infinity)
