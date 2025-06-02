@@ -155,6 +155,8 @@ struct StatsView: View {
                 if photoData.statsModel == nil {
                     startEditing()
                 }
+            } else if photoData.statsModel?.hasParsingError == true {
+                startEditing()
             }
             checkIfAdded()
         }
