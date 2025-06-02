@@ -173,7 +173,7 @@ struct StatsView: View {
             Grid(alignment: .leading, horizontalSpacing: 16, verticalSpacing: 4) {
                 ForEach(editPairs.indices, id: \.self) { index in
                     GridRow {
-                        TextField("Label", text: $editPairs[index].0)
+                        Text(editPairs[index].0)
                         TextField("Value", text: $editPairs[index].1)
                     }
                     Divider().gridCellColumns(2)
