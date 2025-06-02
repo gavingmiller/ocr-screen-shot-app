@@ -68,72 +68,96 @@ struct ContentView: View {
 
     var body: some View {
         NavigationView {
-            VStack(spacing: 0) {
-                Picker("Tabs", selection: $selectedTab) {
-                    ForEach(Tab.allCases, id: \.self) { tab in
-                        Text(tab.title).tag(tab)
+            mainContent
+                .navigationTitle("")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .principal) {
+                        Text("Tower Analysis")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        addButton
                     }
                 }
-                .pickerStyle(.segmented)
-                .padding([.top, .horizontal])
+        }
+    }
 
-                if photoItems.isEmpty {
-                    Spacer()
-                    PhotosPicker(
-                        selection: $selectedItems,
-                        maxSelectionCount: nil,
-                        matching: .images,
-                        photoLibrary: .shared()
-                    ) {
-                        Text("Select Image from Library")
-                            .padding()
-                    }
-                    .onChange(of: selectedItems) { _ in
-                        handleResults(selectedItems)
-                    }
-                    Spacer()
-                } else {
-                    ScrollView {
-                        let columns = [GridItem(.adaptive(minimum: 100), spacing: 2)]
-                        LazyVGrid(columns: columns, spacing: 2) {
-                            ForEach(filteredIndices(), id: \.self) { index in
-                                let item = $photoItems[index]
-                                if let image = item.image {
-                                    NavigationLink(destination: StatsView(photoData: item)) {
-                                        Image(uiImage: image)
-                                            .resizable()
-                                            .scaledToFill()
-                                            .frame(minWidth: 100, minHeight: 100)
-                                            .clipped()
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                analysisView
+    private var mainContent: some View {
+        VStack(spacing: 0) {
+            tabsPicker
+            if photoItems.isEmpty {
+                Spacer()
+                photosPickerView
+                Spacer()
+            } else {
+                photosGridView
             }
-            .navigationTitle("")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text("Tower Analysis")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    PhotosPicker(
-                        selection: $selectedItems,
-                        maxSelectionCount: nil,
-                        matching: .images,
-                        photoLibrary: .shared()
-                    ) {
-                        Image(systemName: "plus")
-                    }
-                    .onChange(of: selectedItems) { _ in
-                        handleResults(selectedItems)
-                    }
+            analysisView
+        }
+    }
+
+    private var tabsPicker: some View {
+        Picker("Tabs", selection: $selectedTab) {
+            ForEach(Tab.allCases, id: \.self) { tab in
+                Text(tab.title).tag(tab)
+            }
+        }
+        .pickerStyle(.segmented)
+        .padding([.top, .horizontal])
+    }
+
+    private var photosPickerView: some View {
+        PhotosPicker(
+            selection: $selectedItems,
+            maxSelectionCount: nil,
+            matching: .images,
+            photoLibrary: .shared()
+        ) {
+            Text("Select Image from Library")
+                .padding()
+        }
+        .onChange(of: selectedItems) { _ in
+            handleResults(selectedItems)
+        }
+    }
+
+    private var photosGridView: some View {
+        ScrollView {
+            let columns = [GridItem(.adaptive(minimum: 100), spacing: 2)]
+            let indices = filteredIndices()
+            LazyVGrid(columns: columns, spacing: 2) {
+                ForEach(indices, id: \.self) { index in
+                    gridItem(for: $photoItems[index])
                 }
             }
+        }
+    }
+
+    @ViewBuilder
+    private func gridItem(for item: Binding<PhotoData>) -> some View {
+        if let image = item.wrappedValue.image {
+            NavigationLink(destination: StatsView(photoData: item)) {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(minWidth: 100, minHeight: 100)
+                    .clipped()
+            }
+        }
+    }
+
+    private var addButton: some View {
+        PhotosPicker(
+            selection: $selectedItems,
+            maxSelectionCount: nil,
+            matching: .images,
+            photoLibrary: .shared()
+        ) {
+            Image(systemName: "plus")
+        }
+        .onChange(of: selectedItems) { _ in
+            handleResults(selectedItems)
         }
     }
 
