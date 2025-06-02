@@ -295,15 +295,34 @@ struct ContentView: View {
     }
 
     private func filteredIndices() -> [Int] {
-        photoItems.indices.filter { index in
+        var seen = Set<String>()
+        return photoItems.indices.compactMap { index in
             let item = photoItems[index]
-            guard !item.isProcessing else { return false }
+            guard !item.isProcessing else { return nil }
+
+            guard let model = item.statsModel else { return nil }
+
+            // Filter by selected tab
             switch selectedTab {
             case .analyzed:
-                return item.statsModel?.hasParsingError != true
+                guard model.hasParsingError == false else { return nil }
             case .errors:
-                return item.statsModel?.hasParsingError == true
+                guard model.hasParsingError == true else { return nil }
             }
+
+            // Exclude duplicates already in the database when not marked as added
+            if !item.isAdded && StatsDatabase.shared.isDuplicate(model) {
+                return nil
+            }
+
+            // Exclude duplicates within the current photo items
+            let key = "\(model.photoDate?.timeIntervalSince1970 ?? 0)-\(model.wave)-\(model.tier)-\(model.duration)-\(model.coinsEarned)-\(model.rerollShardsEarned)"
+            if seen.contains(key) {
+                return nil
+            }
+            seen.insert(key)
+
+            return index
         }
     }
 
