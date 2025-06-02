@@ -219,7 +219,10 @@ struct StatsView: View {
         photoData.statsModel = StatsModel(pairs: editPairs, photoDate: photoData.creationDate)
         editPairs.removeAll()
         isEditing = false
-        if photoData.statsModel?.hasParsingError == false {
+        if let stats = photoData.statsModel, stats.hasParsingError == false {
+            StatsDatabase.shared.add(stats)
+            isAdded = true
+            photoData.isAdded = true
             onParseSuccess?()
         }
     }
