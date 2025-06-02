@@ -300,29 +300,33 @@ struct ContentView: View {
             let item = photoItems[index]
             guard !item.isProcessing else { return nil }
 
-            guard let model = item.statsModel else { return nil }
+            if let model = item.statsModel {
+                // Filter by selected tab
+                switch selectedTab {
+                case .analyzed:
+                    guard model.hasParsingError == false else { return nil }
+                case .errors:
+                    guard model.hasParsingError == true else { return nil }
+                }
 
-            // Filter by selected tab
-            switch selectedTab {
-            case .analyzed:
-                guard model.hasParsingError == false else { return nil }
-            case .errors:
-                guard model.hasParsingError == true else { return nil }
+                // Exclude duplicates already in the database when not marked as added
+                if !item.isAdded && StatsDatabase.shared.isDuplicate(model) {
+                    return nil
+                }
+
+                // Exclude duplicates within the current photo items
+                let key = "\(model.photoDate?.timeIntervalSince1970 ?? 0)-\(model.wave)-\(model.tier)-\(model.duration)-\(model.coinsEarned)-\(model.rerollShardsEarned)"
+                if seen.contains(key) {
+                    return nil
+                }
+                seen.insert(key)
+
+                return index
+            } else {
+                // Show unprocessed images only on the analyzed tab
+                guard selectedTab == .analyzed else { return nil }
+                return index
             }
-
-            // Exclude duplicates already in the database when not marked as added
-            if !item.isAdded && StatsDatabase.shared.isDuplicate(model) {
-                return nil
-            }
-
-            // Exclude duplicates within the current photo items
-            let key = "\(model.photoDate?.timeIntervalSince1970 ?? 0)-\(model.wave)-\(model.tier)-\(model.duration)-\(model.coinsEarned)-\(model.rerollShardsEarned)"
-            if seen.contains(key) {
-                return nil
-            }
-            seen.insert(key)
-
-            return index
         }
     }
 
