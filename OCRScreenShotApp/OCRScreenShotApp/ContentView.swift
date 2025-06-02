@@ -5,6 +5,19 @@ import UIKit
 struct ContentView: View {
     @State private var selectedItems: [PhotosPickerItem] = []
     @State private var photoItems: [PhotoData] = []
+    @State private var selectedTab: Tab = .analyzed
+
+    private enum Tab: Int, CaseIterable {
+        case analyzed
+        case errors
+
+        var title: String {
+            switch self {
+            case .analyzed: return "Analyzed"
+            case .errors: return "Errors"
+            }
+        }
+    }
 
     private var tierAnalysis: (coins: String, cells: String, shards: String)? {
         let models = photoItems.compactMap { $0.statsModel }
@@ -56,6 +69,14 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
+                Picker("Tabs", selection: $selectedTab) {
+                    ForEach(Tab.allCases, id: \.self) { tab in
+                        Text(tab.title).tag(tab)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .padding([.top, .horizontal])
+
                 if photoItems.isEmpty {
                     Spacer()
                     PhotosPicker(
@@ -75,9 +96,10 @@ struct ContentView: View {
                     ScrollView {
                         let columns = [GridItem(.adaptive(minimum: 100), spacing: 2)]
                         LazyVGrid(columns: columns, spacing: 2) {
-                            ForEach($photoItems) { $item in
+                            ForEach(filteredIndices(), id: \.self) { index in
+                                let item = $photoItems[index]
                                 if let image = item.image {
-                                    NavigationLink(destination: StatsView(photoData: $item)) {
+                                    NavigationLink(destination: StatsView(photoData: item)) {
                                         Image(uiImage: image)
                                             .resizable()
                                             .scaledToFill()
@@ -87,19 +109,6 @@ struct ContentView: View {
                                 }
                             }
                         }
-
-                        PhotosPicker(
-                            selection: $selectedItems,
-                            maxSelectionCount: nil,
-                            matching: .images,
-                            photoLibrary: .shared()
-                        ) {
-                            Text("Add Photos")
-                        }
-                        .onChange(of: selectedItems) { _ in
-                            handleResults(selectedItems)
-                        }
-                        .padding()
                     }
                 }
                 analysisView
@@ -110,6 +119,19 @@ struct ContentView: View {
                 ToolbarItem(placement: .principal) {
                     Text("Tower Analysis")
                         .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    PhotosPicker(
+                        selection: $selectedItems,
+                        maxSelectionCount: nil,
+                        matching: .images,
+                        photoLibrary: .shared()
+                    ) {
+                        Image(systemName: "plus")
+                    }
+                    .onChange(of: selectedItems) { _ in
+                        handleResults(selectedItems)
+                    }
                 }
             }
         }
@@ -133,6 +155,8 @@ struct ContentView: View {
                     OCRProcessor.shared.recognizeText(in: data.image!) { text in
                         DispatchQueue.main.async {
                             photoItems[index].ocrText = text
+                            let pairs = OCRProcessor.shared.parsePairs(from: text)
+                            photoItems[index].statsModel = StatsModel(pairs: pairs, photoDate: photoItems[index].creationDate)
                         }
                     }
                 }
@@ -161,6 +185,18 @@ struct ContentView: View {
             RoundedRectangle(cornerRadius: 8)
                 .stroke(Color.primary, lineWidth: 1)
         )
+    }
+
+    private func filteredIndices() -> [Int] {
+        photoItems.indices.filter { index in
+            let item = photoItems[index]
+            switch selectedTab {
+            case .analyzed:
+                return item.statsModel?.hasParsingError != true
+            case .errors:
+                return item.statsModel?.hasParsingError == true
+            }
+        }
     }
 
 }
