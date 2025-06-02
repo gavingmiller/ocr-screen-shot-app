@@ -7,6 +7,10 @@ struct ContentView: View {
     @State private var photoItems: [PhotoData] = []
     @State private var selectedTab: Tab = .analyzed
 
+    private var errorCount: Int {
+        photoItems.filter { $0.statsModel?.hasParsingError == true }.count
+    }
+
     private enum Tab: Int, CaseIterable {
         case analyzed
         case errors
@@ -103,7 +107,11 @@ struct ContentView: View {
     private var tabsPicker: some View {
         Picker("Tabs", selection: $selectedTab) {
             ForEach(Tab.allCases, id: \.self) { tab in
-                Text(tab.title).tag(tab)
+                if tab == .errors && errorCount > 0 {
+                    Text("\(tab.title) (\(errorCount))").tag(tab)
+                } else {
+                    Text(tab.title).tag(tab)
+                }
             }
         }
         .pickerStyle(.segmented)
@@ -178,24 +186,13 @@ struct ContentView: View {
                             photoItems[index].ocrText = text
                             let pairs = OCRProcessor.shared.parsePairs(from: text)
                             photoItems[index].statsModel = StatsModel(pairs: pairs, photoDate: photoItems[index].creationDate)
-                            updateSelectedTab()
                         }
                     }
                 }
             }
             await MainActor.run {
                 selectedItems.removeAll()
-                updateSelectedTab()
             }
-        }
-    }
-
-    @MainActor
-    private func updateSelectedTab() {
-        if photoItems.contains(where: { $0.statsModel?.hasParsingError == true }) {
-            selectedTab = .errors
-        } else {
-            selectedTab = .analyzed
         }
     }
 
