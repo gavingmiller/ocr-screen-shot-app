@@ -10,6 +10,10 @@ struct PhotoData: Identifiable {
     var ocrText: String?
     var statsModel: StatsModel?
     var creationDate: Date?
+    /// Indicates the OCR processing state for this photo
+    var isProcessing: Bool = false
+    /// Indicates whether the stats for this photo have been added to the database
+    var isAdded: Bool = false
 
     init(item: PhotosPickerItem) {
         self.item = item
