@@ -81,6 +81,9 @@ struct ContentView: View {
                     }
                 }
         }
+        .onChange(of: selectedItems) { _ in
+            handleResults(selectedItems)
+        }
     }
 
     private var mainContent: some View {
@@ -116,9 +119,6 @@ struct ContentView: View {
         ) {
             Text("Select Image from Library")
                 .padding()
-        }
-        .onChange(of: selectedItems) { _ in
-            handleResults(selectedItems)
         }
     }
 
@@ -156,9 +156,6 @@ struct ContentView: View {
         ) {
             Image(systemName: "plus")
         }
-        .onChange(of: selectedItems) { _ in
-            handleResults(selectedItems)
-        }
     }
 
     private func handleResults(_ items: [PhotosPickerItem]) {
@@ -181,13 +178,24 @@ struct ContentView: View {
                             photoItems[index].ocrText = text
                             let pairs = OCRProcessor.shared.parsePairs(from: text)
                             photoItems[index].statsModel = StatsModel(pairs: pairs, photoDate: photoItems[index].creationDate)
+                            updateSelectedTab()
                         }
                     }
                 }
             }
             await MainActor.run {
                 selectedItems.removeAll()
+                updateSelectedTab()
             }
+        }
+    }
+
+    @MainActor
+    private func updateSelectedTab() {
+        if photoItems.contains(where: { $0.statsModel?.hasParsingError == true }) {
+            selectedTab = .errors
+        } else {
+            selectedTab = .analyzed
         }
     }
 
