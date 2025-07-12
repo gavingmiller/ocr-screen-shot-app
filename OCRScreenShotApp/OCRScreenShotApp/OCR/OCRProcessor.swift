@@ -51,8 +51,16 @@ class OCRProcessor {
 
     func extractFields(from text: String) -> OCRResultFields {
         func match(for label: String) -> String {
-            if let range = text.range(of: "\(label)\\s*([0-9:]+)", options: .regularExpression) {
-                return String(text[range]).replacingOccurrences(of: label, with: "").trimmingCharacters(in: .whitespaces)
+            // Values like "0h 0m 0s" can appear for the time fields. The
+            // previous regex only captured digits and colons which caused the
+            // letters to be dropped resulting in an invalid time string. This
+            // regex includes the possible "d", "h", "m" and "s" units along with
+            // digits, colons and whitespace so the full value is captured.
+            let pattern = "\(label)\\s*([0-9dhms:\\s]+)"
+            if let range = text.range(of: pattern, options: .regularExpression) {
+                return String(text[range])
+                    .replacingOccurrences(of: label, with: "")
+                    .trimmingCharacters(in: .whitespaces)
             }
             return ""
         }
