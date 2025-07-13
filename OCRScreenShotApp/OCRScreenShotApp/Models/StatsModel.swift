@@ -134,8 +134,15 @@ struct StatsModel: Codable, Equatable, Hashable {
     }
 
     private static func normalizeTime(_ value: String) -> String? {
-        let trimmed = value.trimmingCharacters(in: .whitespaces)
-        let pattern = "^(?:([0-9]+)d\\s*)?([0-9]+)h\\s*([0-9]+)m\\s*([0-9]{1,3})(?:s)?$"
+        // Accept spaces between the numeric value and the unit to handle OCR
+        // cases like "0 h" as well as normal "0h". Newlines are also trimmed to
+        // avoid matching issues when the OCR output includes them. OCR may also
+        // misread the digit "0" as the letter "O", so convert any "O"/"o" to
+        // "0" before parsing.
+        let trimmed = value
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: "[oO]", with: "0", options: .regularExpression)
+        let pattern = "^(?:([0-9]+)\\s*d\\s*)?([0-9]+)\\s*h\\s*([0-9]+)\\s*m\\s*([0-9]{1,3})\\s*(?:s)?$"
         guard let regex = try? NSRegularExpression(pattern: pattern, options: .caseInsensitive),
               let match = regex.firstMatch(in: trimmed, options: [], range: NSRange(location: 0, length: trimmed.utf16.count)) else {
             return nil
@@ -196,8 +203,11 @@ struct StatsModel: Codable, Equatable, Hashable {
     // MARK: - Value Conversion Helpers
 
     static func timeToSeconds(_ time: String) -> Double {
-        let trimmed = time.trimmingCharacters(in: .whitespaces)
-        let pattern = "^(?:([0-9]+)d\\s*)?([0-9]+)h\\s*([0-9]+)m\\s*([0-9]+)s$"
+        let trimmed = time
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: "[oO]", with: "0", options: .regularExpression)
+        // Allow spaces between digits and units similar to ``normalizeTime``.
+        let pattern = "^(?:([0-9]+)\\s*d\\s*)?([0-9]+)\\s*h\\s*([0-9]+)\\s*m\\s*([0-9]+)\\s*s$"
         guard let regex = try? NSRegularExpression(pattern: pattern, options: .caseInsensitive),
               let match = regex.firstMatch(in: trimmed, options: [], range: NSRange(location: 0, length: trimmed.utf16.count)) else {
             return 0
