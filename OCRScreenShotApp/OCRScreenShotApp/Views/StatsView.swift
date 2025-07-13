@@ -133,7 +133,7 @@ struct StatsView: View {
 
                     HStack {
                         analysisButton
-                        if !isAdded {
+                        if !isAdded && !isDuplicate {
                             Button("Edit Stats") { startEditing() }
                                 .padding(.leading)
                         }
@@ -150,7 +150,7 @@ struct StatsView: View {
                     Text(text)
                         .font(.footnote)
                         .padding(.top, 2)
-                    if !isAdded {
+                    if !isAdded && !isDuplicate {
                         Button("Edit Stats") { startEditing() }
                             .padding(.top, 8)
                     }
@@ -170,13 +170,16 @@ struct StatsView: View {
                 if !pairs.isEmpty {
                     photoData.wrappedValue.statsModel = StatsModel(pairs: pairs, photoDate: photoData.wrappedValue.creationDate)
                 }
-                if photoData.wrappedValue.statsModel == nil {
+                checkIfAdded()
+                if photoData.wrappedValue.statsModel == nil && !isDuplicate {
                     startEditing()
                 }
-            } else if photoData.wrappedValue.statsModel?.hasParsingError == true {
-                startEditing()
+            } else {
+                checkIfAdded()
+                if photoData.wrappedValue.statsModel?.hasParsingError == true && !isDuplicate {
+                    startEditing()
+                }
             }
-            checkIfAdded()
         }
         .onChange(of: photoData.wrappedValue.statsModel) { _ in
             checkIfAdded()
@@ -212,6 +215,7 @@ struct StatsView: View {
             HStack {
                 Button("Save") { saveEdits() }
                     .buttonStyle(.borderedProminent)
+                Spacer()
                 Button("Discard", role: .destructive) {
                     if statsModel == nil || statsModel?.hasParsingError == true {
                         deleteCurrent()
@@ -226,6 +230,7 @@ struct StatsView: View {
     }
 
     private func startEditing() {
+        guard !isDuplicate else { return }
         if editPairs.isEmpty {
             if !displayPairs.isEmpty {
                 let nonEditable = ["Photo Date", "Duration", "Coin Efficiency", "Cell Efficiency", "Shard Efficiency"]
@@ -303,8 +308,13 @@ struct StatsView: View {
         if let model = photoData.wrappedValue.statsModel {
             StatsDatabase.shared.remove(model)
         }
-        photoItems.remove(at: indices[currentIndex])
+        let index = indices[currentIndex]
         dismiss()
+        DispatchQueue.main.async {
+            if photoItems.indices.contains(index) {
+                photoItems.remove(at: index)
+            }
+        }
     }
 
     private func addToDatabase() {
