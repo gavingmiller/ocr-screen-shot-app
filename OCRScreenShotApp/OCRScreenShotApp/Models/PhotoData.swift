@@ -4,8 +4,8 @@ import Photos
 import ImageIO
 
 struct PhotoData: Identifiable {
-    let id = UUID()
-    let item: PhotosPickerItem
+    let id: UUID
+    var item: PhotosPickerItem?
     var image: UIImage?
     var ocrText: String?
     var statsModel: StatsModel?
@@ -18,7 +18,19 @@ struct PhotoData: Identifiable {
     var isDuplicate: Bool = false
 
     init(item: PhotosPickerItem) {
+        self.id = UUID()
         self.item = item
+    }
+
+    init(id: UUID = UUID(), image: UIImage?, ocrText: String?, statsModel: StatsModel?, creationDate: Date?, isAdded: Bool = false, isDuplicate: Bool = false) {
+        self.id = id
+        self.item = nil
+        self.image = image
+        self.ocrText = ocrText
+        self.statsModel = statsModel
+        self.creationDate = creationDate
+        self.isAdded = isAdded
+        self.isDuplicate = isDuplicate
     }
 
     // Cropping ratios based on a 1206x2622 reference screenshot.
@@ -47,6 +59,7 @@ struct PhotoData: Identifiable {
     }
 
     mutating func loadImage() async -> Bool {
+        guard let item = item else { return false }
         if let data = try? await item.loadTransferable(type: Data.self),
            let uiImage = UIImage(data: data) {
             let cropped = crop(uiImage)

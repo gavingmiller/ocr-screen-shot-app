@@ -263,6 +263,7 @@ struct StatsView: View {
                 photoData.wrappedValue.isDuplicate = true
             }
             onParseSuccess?()
+            PhotoPersistence.shared.save(photoItems)
         }
     }
 
@@ -303,6 +304,7 @@ struct StatsView: View {
             StatsDatabase.shared.remove(model)
         }
         photoItems.remove(at: indices[currentIndex])
+        PhotoPersistence.shared.save(photoItems)
         dismiss()
     }
 
@@ -316,6 +318,7 @@ struct StatsView: View {
             isDuplicate = true
             photoData.wrappedValue.isDuplicate = true
         }
+        PhotoPersistence.shared.save(photoItems)
     }
 
     private func checkIfAdded() {
