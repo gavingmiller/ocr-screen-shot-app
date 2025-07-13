@@ -3,7 +3,7 @@ import PhotosUI
 import Photos
 import ImageIO
 
-struct PhotoData: Identifiable {
+struct PhotoData: Identifiable, Equatable {
     let id: UUID
     var item: PhotosPickerItem?
     var image: UIImage?
@@ -89,5 +89,17 @@ struct PhotoData: Identifiable {
         } else {
             return false
         }
+    }
+}
+
+extension PhotoData {
+    static func == (lhs: PhotoData, rhs: PhotoData) -> Bool {
+        lhs.id == rhs.id &&
+        lhs.ocrText == rhs.ocrText &&
+        lhs.statsModel == rhs.statsModel &&
+        lhs.creationDate == rhs.creationDate &&
+        lhs.isProcessing == rhs.isProcessing &&
+        lhs.isAdded == rhs.isAdded &&
+        lhs.isDuplicate == rhs.isDuplicate
     }
 }
