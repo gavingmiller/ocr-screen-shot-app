@@ -297,8 +297,13 @@ struct StatsView: View {
         if let model = photoData.wrappedValue.statsModel {
             StatsDatabase.shared.remove(model)
         }
-        photoItems.remove(at: indices[currentIndex])
+        let index = indices[currentIndex]
         dismiss()
+        DispatchQueue.main.async {
+            if photoItems.indices.contains(index) {
+                photoItems.remove(at: index)
+            }
+        }
     }
 
     private func addToDatabase() {
