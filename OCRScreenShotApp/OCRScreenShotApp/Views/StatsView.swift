@@ -324,18 +324,22 @@ struct StatsView: View {
     }
 
     private func checkIfAdded() {
-        if let model = photoData.wrappedValue.statsModel {
+        guard currentIndex < indices.count else { return }
+        let index = indices[currentIndex]
+        guard photoItems.indices.contains(index) else { return }
+
+        if let model = photoItems[index].statsModel {
             let added = db.entries.contains(model)
             let duplicate = db.isDuplicate(model) && !added
             isAdded = added
             isDuplicate = duplicate
-            photoData.wrappedValue.isAdded = added
-            photoData.wrappedValue.isDuplicate = duplicate
+            photoItems[index].isAdded = added
+            photoItems[index].isDuplicate = duplicate
         } else {
             isAdded = false
             isDuplicate = false
-            photoData.wrappedValue.isAdded = false
-            photoData.wrappedValue.isDuplicate = false
+            photoItems[index].isAdded = false
+            photoItems[index].isDuplicate = false
         }
     }
 }
