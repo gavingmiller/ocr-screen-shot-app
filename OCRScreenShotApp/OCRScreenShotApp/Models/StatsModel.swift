@@ -203,10 +203,15 @@ struct StatsModel: Codable, Equatable, Hashable {
     // MARK: - Value Conversion Helpers
 
     static func timeToSeconds(_ time: String) -> Double {
-        let trimmed = time
+        var trimmed = time
             .trimmingCharacters(in: .whitespacesAndNewlines)
             .replacingOccurrences(of: "[oO]", with: "0", options: .regularExpression)
         // Allow spaces between digits and units similar to ``normalizeTime``.
+        // If the string is missing the trailing "s" on the seconds value,
+        // append it so the regex will still match.
+        if !trimmed.lowercased().hasSuffix("s") {
+            trimmed += "s"
+        }
         let pattern = "^(?:([0-9]+)\\s*d\\s*)?([0-9]+)\\s*h\\s*([0-9]+)\\s*m\\s*([0-9]+)\\s*s$"
         guard let regex = try? NSRegularExpression(pattern: pattern, options: .caseInsensitive),
               let match = regex.firstMatch(in: trimmed, options: [], range: NSRange(location: 0, length: trimmed.utf16.count)) else {

@@ -216,7 +216,13 @@ struct StatsView: View {
                 Button("Save") { saveEdits() }
                     .buttonStyle(.borderedProminent)
                 Spacer()
-                Button("Discard", role: .destructive) { isEditing = false }
+                Button("Discard", role: .destructive) {
+                    if statsModel == nil || statsModel?.hasParsingError == true {
+                        deleteCurrent()
+                    } else {
+                        isEditing = false
+                    }
+                }
                     .buttonStyle(.bordered)
             }
             .padding(.top, 8)
@@ -303,9 +309,14 @@ struct StatsView: View {
         if let model = photoData.wrappedValue.statsModel {
             StatsDatabase.shared.remove(model)
         }
-        photoItems.remove(at: indices[currentIndex])
-        PhotoPersistence.shared.save(photoItems)
+        let index = indices[currentIndex]
         dismiss()
+        DispatchQueue.main.async {
+            if photoItems.indices.contains(index) {
+                photoItems.remove(at: index)
+            }
+            PhotoPersistence.shared.save(photoItems)
+        }
     }
 
     private func addToDatabase() {
