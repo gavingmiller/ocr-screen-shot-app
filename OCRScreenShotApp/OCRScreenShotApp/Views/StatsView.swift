@@ -212,7 +212,13 @@ struct StatsView: View {
             HStack {
                 Button("Save") { saveEdits() }
                     .buttonStyle(.borderedProminent)
-                Button("Discard", role: .destructive) { isEditing = false }
+                Button("Discard", role: .destructive) {
+                    if statsModel == nil || statsModel?.hasParsingError == true {
+                        deleteCurrent()
+                    } else {
+                        isEditing = false
+                    }
+                }
                     .buttonStyle(.bordered)
             }
             .padding(.top, 8)
