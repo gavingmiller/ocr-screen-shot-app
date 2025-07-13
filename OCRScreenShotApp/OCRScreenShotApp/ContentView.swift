@@ -133,6 +133,12 @@ struct ContentView: View {
                     }
                 }
         }
+        .onAppear {
+            photoItems = PhotoPersistence.shared.load()
+        }
+        .onChange(of: photoItems) { newValue in
+            PhotoPersistence.shared.save(newValue)
+        }
         .onChange(of: selectedItems) { _ in
             handleResults(selectedItems)
         }
@@ -260,6 +266,7 @@ struct ContentView: View {
                                 photoItems[index].isAdded = added
                                 photoItems[index].isDuplicate = !added && StatsDatabase.shared.isDuplicate(model)
                             }
+                            PhotoPersistence.shared.save(photoItems)
                         }
                     }
                 } else {
@@ -271,6 +278,7 @@ struct ContentView: View {
             await MainActor.run {
                 selectedItems.removeAll()
             }
+            PhotoPersistence.shared.save(photoItems)
         }
     }
 
