@@ -176,9 +176,6 @@ struct StatsView: View {
                 }
             } else {
                 checkIfAdded()
-                if photoData.wrappedValue.statsModel?.hasParsingError == true && !isDuplicate {
-                    startEditing()
-                }
             }
         }
         .onChange(of: photoData.wrappedValue.statsModel) { _ in
