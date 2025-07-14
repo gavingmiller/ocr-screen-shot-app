@@ -11,6 +11,7 @@ struct StatsView: View {
     @State private var isDuplicate = false
     @State private var isEditing = false
     @State private var editPairs: [(String, String)] = []
+    @State private var pendingDeleteIndex: Int? = nil
     @ObservedObject private var db = StatsDatabase.shared
     @Environment(\.dismiss) private var dismiss
     init(photoItems: Binding<[PhotoData]>, indices: [Int], startIndex: Int, onParseSuccess: (() -> Void)? = nil) {
@@ -187,6 +188,16 @@ struct StatsView: View {
         .onReceive(db.$entries) { _ in
             checkIfAdded()
         }
+        .onDisappear {
+            if let index = pendingDeleteIndex {
+                DispatchQueue.main.async {
+                    if photoItems.indices.contains(index) {
+                        photoItems.remove(at: index)
+                    }
+                    pendingDeleteIndex = nil
+                }
+            }
+        }
         .toolbar {
             ToolbarItemGroup(placement: .navigationBarTrailing) {
                 Button(action: previousItem) {
@@ -302,13 +313,8 @@ struct StatsView: View {
         if let model = photoData.wrappedValue.statsModel {
             StatsDatabase.shared.remove(model)
         }
-        let index = indices[currentIndex]
+        pendingDeleteIndex = indices[currentIndex]
         dismiss()
-        DispatchQueue.main.async {
-            if photoItems.indices.contains(index) {
-                photoItems.remove(at: index)
-            }
-        }
     }
 
     private func addToDatabase() {
